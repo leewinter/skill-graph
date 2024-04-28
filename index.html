@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skill Graph</title>
+    <style>
+      .tabulator-popup-container {
+        position: absolute;
+        left: 100px;
+        background: #fff;
+        cursor: pointer;
+        padding: 3px;
+        border: 2px solid #556cd6;
+        border-radius: 5px;
+      }
+      .tabulator-edit-list-item.active {
+        background: lightgreen;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
