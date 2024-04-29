@@ -1,7 +1,11 @@
 import { TechnologyRow } from "@src/components/Table";
 import { useWindowResize } from "@src/hooks/useWindowResize";
-import { ScriptableContext } from "chart.js";
+import { CoreChartOptions, ScriptableContext } from "chart.js";
 import { Radar } from "react-chartjs-2";
+
+interface ChartOptionsShim extends CoreChartOptions<"radar"> {
+  script: { min: number; max: number };
+}
 
 export default function RadarTechnology(props: { data: TechnologyRow[] }) {
   const { data } = props;
@@ -14,25 +18,25 @@ export default function RadarTechnology(props: { data: TechnologyRow[] }) {
       width={100}
       height={30}
       datasetIdKey="technology"
-      options={{
-        indexAxis: "y",
-        responsive: true,
-        animation: {
-          delay: (context) => {
-            let delay = 0;
-            if (context.type === "data" && context.mode === "default") {
-              // Adapt the data point index animation delay according to the quantity. This will prevent massive datasets taking 3 days to load
-              delay = context.dataIndex * (1800 / data.length);
-            }
-            return delay;
+      options={
+        {
+          responsive: true,
+          animation: {
+            delay: (context: ScriptableContext<"radar">) => {
+              let delay = 0;
+              if (context.type === "data" && context.mode === "default") {
+                // Adapt the data point index animation delay according to the quantity. This will prevent massive datasets taking 3 days to load
+                delay = context.dataIndex * (1800 / data.length);
+              }
+              return delay;
+            },
           },
-        },
-        scales: {
-          x: {
-            beginAtZero: true,
+          scale: {
+            min: 0,
+            max: 10,
           },
-        },
-      }}
+        } as unknown as ChartOptionsShim
+      }
       data={{
         labels: data.map((n) => n.technology),
         datasets: [
