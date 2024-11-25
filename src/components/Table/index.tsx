@@ -13,6 +13,18 @@ import {
   ConfirmationCallback,
   defaultConfirmCallback,
 } from "@src/components/ConfirmDialog";
+import { InfoDialog } from "@src/components/InfoDialog/Index";
+
+function copyToClipboard(text: string) {
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      console.log("Text copied to clipboard");
+    })
+    .catch((err) => {
+      console.error("Failed to copy text: ", err);
+    });
+}
 
 export type TechnologyRow = {
   technology: string;
@@ -67,6 +79,7 @@ export default function Table() {
   const [deleteRowOpen, setDeleteRowOpen] = useState<ConfirmationCallback>(
     defaultConfirmCallback
   );
+  const [dataUrlOpen, setDataUrlOpen] = useState<string | null>(null);
 
   const table = useRef(null);
 
@@ -112,6 +125,16 @@ export default function Table() {
     handleDataChanged(result);
   };
 
+  const handleDataUrlToClipboard = () => {
+    const base64Data = dataAsBase64<TechnologyRow[]>(data);
+    const dataUrl = `${window.location.href.replace(
+      window.location.search,
+      ""
+    )}?data=${base64Data}`;
+    copyToClipboard(dataUrl);
+    setDataUrlOpen(dataUrl);
+  };
+
   return (
     <div>
       <ReactTabulator
@@ -152,17 +175,8 @@ export default function Table() {
         text="Add Row"
       ></Button>
       <Button
-        onClick={() => {
-          const base64Data = dataAsBase64<TechnologyRow[]>(data);
-          window.open(
-            `${window.location.href.replace(
-              window.location.search,
-              ""
-            )}?data=${base64Data}`,
-            "_blank"
-          );
-        }}
-        text="Open Data Url"
+        onClick={handleDataUrlToClipboard}
+        text="Copy Data Url to Clipboard"
       ></Button>
       <ConfirmDialog
         id="import-data-confirmation"
@@ -177,6 +191,14 @@ export default function Table() {
         onClose={deleteRowOpen.callback}
         open={deleteRowOpen.open}
         message="Remove this row?"
+      />
+      <InfoDialog
+        id="data-url-confirmation"
+        keepMounted
+        onClose={() => setDataUrlOpen(null)}
+        open={Boolean(dataUrlOpen)}
+        message="Url copied to the clipboard"
+        url={dataUrlOpen}
       />
     </div>
   );
