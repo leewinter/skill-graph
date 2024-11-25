@@ -20,8 +20,8 @@ export function InfoDialog(props: InfoDialogProps) {
 
   return (
     <Dialog
-      sx={{ "& .MuiDialog-paper": { width: "80%", maxHeight: 435 } }}
-      maxWidth="xs"
+      sx={{ "& .MuiDialog-paper": { width: "100%", maxHeight: 435 } }}
+      maxWidth="md"
       open={open}
       {...other}
     >
