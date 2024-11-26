@@ -12,21 +12,28 @@ export default function PieTechnology(props: { data: TechnologyRow[] }) {
       key={`technology-${dimensions.height}-${dimensions.width}`}
       datasetIdKey="technology"
       options={{
-        indexAxis: "y",
         responsive: true,
         animation: {
           delay: (context) => {
             let delay = 0;
             if (context.type === "data" && context.mode === "default") {
-              // Adapt the data point index animation delay according to the quantity. This will prevent massive datasets taking 3 days to load
+              // Adapt the data point index animation delay according to the quantity
               delay = context.dataIndex * (1800 / data.length);
             }
             return delay;
           },
         },
+        plugins: {
+          legend: {
+            display: true, // You can customize the legend here if needed
+          },
+        },
         scales: {
           x: {
-            beginAtZero: true,
+            display: false, // Remove the x-axis
+          },
+          y: {
+            display: false, // Remove the y-axis
           },
         },
       }}
@@ -42,6 +49,7 @@ export default function PieTechnology(props: { data: TechnologyRow[] }) {
                   Math.floor(Math.random() * (255 - 1 + 1)) + 1
                 },0.4)`
             ),
+            borderWidth: 0, // Remove the border to make it look cleaner
           },
         ],
       }}

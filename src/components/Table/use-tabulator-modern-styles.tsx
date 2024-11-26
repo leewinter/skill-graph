@@ -1446,8 +1446,6 @@ export function useTabulatorModernStyles() {
     .tabulator-print-table .tabulator-print-table-group span {
       color: ${theme.palette.text.primary};
     }
-
-    /*# sourceMappingURL=tabulator_modern.css.map */
   `;
 
   return styles;

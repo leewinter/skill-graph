@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-// import "react-tabulator/lib/css/tabulator_modern.min.css";
 import { ReactTabulator } from "react-tabulator";
 import { useEffect, useRef, useState } from "react";
 import localforage from "localforage";
