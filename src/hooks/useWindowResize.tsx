@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 
 function debounce<Params extends unknown[]>(
   func: (...args: Params) => unknown,
@@ -7,38 +7,43 @@ function debounce<Params extends unknown[]>(
   let timer: number;
   return (...args: Params) => {
     clearTimeout(timer);
-    timer = setTimeout(() => {
+    timer = window.setTimeout(() => {
       func(...args);
     }, timeout);
   };
 }
 
 type UseWindowResizeParams = {
-  debounceDelay: number;
+  debounceDelay?: number;
 };
 
 export function useWindowResize(
   props: UseWindowResizeParams = { debounceDelay: 500 }
 ) {
-  const [dimensions, setDimensions] = React.useState({
+  const [dimensions, setDimensions] = useState({
     height: window.innerHeight,
     width: window.innerWidth,
   });
 
+  const handleResize = useCallback(() => {
+    setDimensions({
+      height: window.innerHeight,
+      width: window.innerWidth,
+    });
+  }, []);
+
   useEffect(() => {
-    const debouncedHandleResize = debounce(function handleResize() {
-      setDimensions({
-        height: window.innerHeight,
-        width: window.innerWidth,
-      });
-    }, props.debounceDelay);
+    const debouncedHandleResize = debounce(
+      handleResize,
+      props.debounceDelay || 500
+    );
 
     window.addEventListener("resize", debouncedHandleResize);
 
     return () => {
       window.removeEventListener("resize", debouncedHandleResize);
     };
-  });
+  }, [handleResize, props.debounceDelay]);
 
   return { dimensions };
 }

@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import "react-tabulator/lib/css/tabulator_modern.min.css";
 import { ReactTabulator } from "react-tabulator";
 import { useEffect, useRef, useState } from "react";
 import localforage from "localforage";
@@ -14,6 +13,7 @@ import {
   defaultConfirmCallback,
 } from "@src/components/ConfirmDialog";
 import { InfoDialog } from "@src/components/InfoDialog/Index";
+import { useTabulatorModernStyles } from "./use-tabulator-modern-styles";
 
 function copyToClipboard(text: string) {
   navigator.clipboard
@@ -81,6 +81,8 @@ export default function Table() {
   );
   const [dataUrlOpen, setDataUrlOpen] = useState<string | null>(null);
 
+  const styles = useTabulatorModernStyles();
+
   const table = useRef(null);
 
   const [searchParams] = useSearchParams();
@@ -136,7 +138,7 @@ export default function Table() {
   };
 
   return (
-    <div>
+    <div css={styles}>
       <ReactTabulator
         events={{
           dataChanged: handleDataChanged,
