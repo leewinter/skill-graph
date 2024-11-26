@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -5,6 +6,12 @@ import Divider from "@mui/material/Divider";
 import Button from "@mui/material/Button";
 
 export default function Home() {
+  const navigate = useNavigate();
+
+  const handleGetStarted = () => {
+    navigate("/table");
+  };
+
   return (
     <Container maxWidth="sm">
       <Box sx={{ my: 4 }}>
@@ -30,7 +37,12 @@ export default function Home() {
           on your browser compatibility.
         </Typography>
         <Box textAlign="center" mt={4}>
-          <Button variant="contained" color="primary" size="large">
+          <Button
+            variant="contained"
+            color="primary"
+            size="large"
+            onClick={handleGetStarted}
+          >
             Get Started
           </Button>
         </Box>
