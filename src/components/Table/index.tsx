@@ -84,7 +84,7 @@ export default function Table() {
 
   const styles = useTabulatorModernStyles();
 
-  const table = useRef(null);
+  const table = useRef<any>();
 
   const [searchParams] = useSearchParams();
 
