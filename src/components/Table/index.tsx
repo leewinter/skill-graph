@@ -14,6 +14,7 @@ import {
 } from "@src/components/ConfirmDialog";
 import { InfoDialog } from "@src/components/InfoDialog/Index";
 import { useTabulatorModernStyles } from "./use-tabulator-modern-styles";
+import Stack from "@mui/material/Stack";
 
 function copyToClipboard(text: string) {
   navigator.clipboard
@@ -170,16 +171,19 @@ export default function Table() {
           theme: "Midnight",
         }}
       />
-      <Button
-        onClick={() => {
-          handleDataChanged([...data, defaultRow]);
-        }}
-        text="Add Row"
-      ></Button>
-      <Button
-        onClick={handleDataUrlToClipboard}
-        text="Copy Data Url to Clipboard"
-      ></Button>
+      <Stack direction="row" spacing={2}>
+        <Button
+          onClick={() => {
+            handleDataChanged([...data, defaultRow]);
+          }}
+          text="Add Row"
+        />
+        <Button
+          onClick={handleDataUrlToClipboard}
+          text="Copy Data Url to Clipboard"
+          disabled={data.length === 0}
+        />
+      </Stack>
       <ConfirmDialog
         id="import-data-confirmation"
         keepMounted
