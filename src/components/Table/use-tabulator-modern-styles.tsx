@@ -177,7 +177,7 @@ export function useTabulatorModernStyles() {
 
     .tabulator
       .tabulator-header
-      .tabulator-col:first-child
+      .tabulator-col:first-of-type
       .tabulator-col-resize-handle.prev {
       display: none;
     }
@@ -697,7 +697,7 @@ export function useTabulatorModernStyles() {
     }
 
     .tabulator-row
-      .tabulator-cell:first-child
+      .tabulator-cell:first-of-type
       .tabulator-col-resize-handle.prev {
       display: none;
     }
@@ -1364,7 +1364,7 @@ export function useTabulatorModernStyles() {
       .tabulator-footer
       .tabulator-calcs-holder
       .tabulator-row
-      .tabulator-cell:first-child {
+      .tabulator-cell:first-of-type {
       border-left: 10px solid transparent;
     }
 
@@ -1376,19 +1376,19 @@ export function useTabulatorModernStyles() {
       margin-bottom: 2px;
     }
 
-    .tabulator-row .tabulator-cell:first-child {
+    .tabulator-row .tabulator-cell:first-of-type {
       border-left: 10px solid ${theme.palette.primary.dark};
     }
 
-    .tabulator-row:nth-child(even) {
+    .tabulator-row:nth-of-type(even) {
       background-color: ${theme.palette.primary.light};
     }
 
-    .tabulator-row:nth-child(even) .tabulator-cell {
+    .tabulator-row:nth-of-type(even) .tabulator-cell {
       background-color: ${theme.palette.background.paper};
     }
 
-    .tabulator-row:nth-child(even) .tabulator-cell:first-child {
+    .tabulator-row:nth-of-type(even) .tabulator-cell:first-of-type {
       border-left: 10px solid ${theme.palette.primary.light};
     }
 
