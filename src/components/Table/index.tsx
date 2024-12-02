@@ -33,7 +33,7 @@ export type TechnologyRow = {
 };
 
 const DeleteButton = function () {
-  return "<button style='background-color: #FFCCCB;'>X</button>";
+  return "<button class='delete-btn'>X</button>";
 };
 
 const columns = [
