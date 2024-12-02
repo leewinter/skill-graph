@@ -9,6 +9,10 @@ export default defineConfig({
       "@src": path.resolve(__dirname, "./src"),
     },
   },
-  plugins: [react()],
+  plugins: [
+    react({
+      jsxImportSource: "@emotion/react",
+    }),
+  ],
   base: "/skill-graph/",
 });

@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { Outlet, NavLink } from "react-router-dom";
 import { AppBar, Toolbar, useTheme } from "@mui/material";
 import { css } from "@emotion/react";

@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import MuiButton from "@mui/material/Button";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
