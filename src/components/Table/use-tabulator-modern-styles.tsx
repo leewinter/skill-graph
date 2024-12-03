@@ -19,6 +19,10 @@ export function useTabulatorModernStyles() {
       transform: translatez(0);
     }
 
+    div .delete-btn {
+      background-color: ${theme.palette.error.light};
+    }
+
     .tabulator[tabulator-layout="fitDataFill"]
       .tabulator-tableholder
       .tabulator-table {
@@ -67,7 +71,7 @@ export function useTabulatorModernStyles() {
     .tabulator .tabulator-header .tabulator-col.tabulator-moving {
       position: absolute;
       border: 1px solid ${theme.palette.primary.dark};
-      background: #e6e6e6;
+      background: ${theme.palette.background.paper};
       pointer-events: none;
     }
 
@@ -123,7 +127,7 @@ export function useTabulatorModernStyles() {
       .tabulator-title-editor {
       box-sizing: border-box;
       width: 100%;
-      border: 1px solid #999;
+      border: 1px solid ${theme.palette.grey[600]};
       padding: 1px;
       background: ${theme.palette.background.paper};
     }
@@ -161,7 +165,7 @@ export function useTabulatorModernStyles() {
       height: 0;
       border-left: 6px solid transparent;
       border-right: 6px solid transparent;
-      border-bottom: 6px solid #b7c3f1;
+      border-bottom: 6px solid ${theme.palette.primary.light};
     }
 
     .tabulator
@@ -220,7 +224,7 @@ export function useTabulatorModernStyles() {
 
     .tabulator .tabulator-header .tabulator-col.tabulator-sortable:hover {
       cursor: pointer;
-      background-color: #e6e6e6;
+      background-color: ${theme.palette.background.paper};
     }
 
     .tabulator
@@ -238,7 +242,7 @@ export function useTabulatorModernStyles() {
       .tabulator-col-sorter
       .tabulator-arrow {
       border-top: none;
-      border-bottom: 6px solid #b7c3f1;
+      border-bottom: 6px solid ${theme.palette.primary.light};
     }
 
     .tabulator
@@ -416,7 +420,7 @@ export function useTabulatorModernStyles() {
       .tabulator-table
       .tabulator-row.tabulator-calcs {
       font-weight: bold;
-      background: #f2f2f2 !important;
+      background: ${theme.palette.background.paper} !important;
     }
 
     .tabulator
@@ -435,7 +439,7 @@ export function useTabulatorModernStyles() {
 
     .tabulator .tabulator-footer {
       padding: 5px 10px;
-      border-top: 1px solid #999;
+      border-top: 1px solid ${theme.palette.grey[600]};
       background-color: ${theme.palette.background.paper};
       text-align: right;
       color: ${theme.palette.text.primary};
@@ -487,7 +491,7 @@ export function useTabulatorModernStyles() {
       display: inline-block;
       margin: 0 5px;
       padding: 2px 5px;
-      border: 1px solid #aaa;
+      border: 1px solid ${theme.palette.grey[500]};
       border-radius: 3px;
     }
 
@@ -499,7 +503,7 @@ export function useTabulatorModernStyles() {
       display: inline-block;
       margin: 0 2px;
       padding: 2px 5px;
-      border: 1px solid #aaa;
+      border: 1px solid ${theme.palette.grey[500]};
       border-radius: 3px;
       background: rgba(255, 255, 255, 0.2);
     }
@@ -564,7 +568,7 @@ export function useTabulatorModernStyles() {
     }
 
     .tabulator .tabulator-loader .tabulator-loader-msg.tabulator-error {
-      border: 4px solid #d00;
+      border: 4px solid ${theme.palette.divider};
       color: ${theme.palette.text.primary};
     }
 
@@ -580,21 +584,21 @@ export function useTabulatorModernStyles() {
     }
 
     .tabulator-row.tabulator-selectable:hover {
-      background-color: #bbb;
+      background-color: ${theme.palette.grey[600]};
       cursor: pointer;
     }
 
     .tabulator-row.tabulator-selected {
-      background-color: #9abcea;
+      background-color: ${theme.palette.primary.light};
     }
 
     .tabulator-row.tabulator-selected:hover {
-      background-color: #769bcc;
+      background-color: ${theme.palette.primary.main};
       cursor: pointer;
     }
 
     .tabulator-row.tabulator-row-moving {
-      border: 1px solid #000;
+      border: 1px solid ${theme.palette.divider};
       background: ${theme.palette.background.paper};
     }
 
@@ -674,7 +678,7 @@ export function useTabulatorModernStyles() {
     }
 
     .tabulator-row .tabulator-cell.tabulator-editing {
-      border: 1px solid #1d68cd;
+      border: 1px solid ${theme.palette.primary.main};
       outline: none;
       padding: 0;
     }
@@ -686,7 +690,7 @@ export function useTabulatorModernStyles() {
     }
 
     .tabulator-row .tabulator-cell.tabulator-validation-fail {
-      border: 1px solid #dd0000;
+      border: 1px solid ${theme.palette.error.main};
     }
 
     .tabulator-row .tabulator-cell.tabulator-validation-fail input,
@@ -725,7 +729,7 @@ export function useTabulatorModernStyles() {
       width: 100%;
       height: 3px;
       margin-top: 2px;
-      background: #666;
+      background: ${theme.palette.grey[700]};
     }
 
     .tabulator-row .tabulator-cell .tabulator-data-tree-branch {
@@ -818,7 +822,7 @@ export function useTabulatorModernStyles() {
       height: 15px;
       width: 15px;
       border-radius: 20px;
-      background: #666;
+      background: ${theme.palette.grey[700]};
       color: ${theme.palette.text.primary};
       font-weight: bold;
       font-size: 1.1em;
@@ -858,12 +862,12 @@ export function useTabulatorModernStyles() {
 
     .tabulator-row.tabulator-group {
       box-sizing: border-box;
-      border-bottom: 1px solid #999;
+      border-bottom: 1px solid ${theme.palette.grey[600]};
       border-right: 1px solid ${theme.palette.background.paper};
-      border-top: 1px solid #999;
+      border-top: 1px solid ${theme.palette.grey[600]};
       padding: 5px;
       padding-left: 10px;
-      background: #ccc;
+      background: ${theme.palette.grey[400]};
       font-weight: bold;
       min-width: 100%;
     }
@@ -995,7 +999,7 @@ export function useTabulatorModernStyles() {
 
     .tabulator-edit-select-list .tabulator-edit-select-list-item.active {
       color: ${theme.palette.text.primary};
-      background: #1d68cd;
+      background: ${theme.palette.primary.main};
     }
 
     .tabulator-edit-select-list
@@ -1004,13 +1008,13 @@ export function useTabulatorModernStyles() {
     }
 
     .tabulator-edit-select-list .tabulator-edit-select-list-item.focused {
-      outline: 1px solid #1d68cd;
+      outline: 1px solid ${theme.palette.primary.main};
     }
 
     .tabulator-edit-select-list .tabulator-edit-select-list-item:hover {
       cursor: pointer;
       color: ${theme.palette.text.primary};
-      background: #1d68cd;
+      background: ${theme.palette.primary.main};
     }
 
     .tabulator-edit-select-list .tabulator-edit-select-list-notice {
@@ -1134,12 +1138,12 @@ export function useTabulatorModernStyles() {
 
     .tabulator-print-table .tabulator-print-table-group {
       box-sizing: border-box;
-      border-bottom: 1px solid #999;
+      border-bottom: 1px solid ${theme.palette.grey[600]};
       border-right: 1px solid ${theme.palette.background.paper};
-      border-top: 1px solid #999;
+      border-top: 1px solid ${theme.palette.grey[600]};
       padding: 5px;
       padding-left: 10px;
-      background: #ccc;
+      background: ${theme.palette.grey[400]};
       font-weight: bold;
       min-width: 100%;
     }
@@ -1397,15 +1401,15 @@ export function useTabulatorModernStyles() {
     }
 
     .tabulator-row.tabulator-selectable:hover .tabulator-cell {
-      background-color: #bbb;
+      background-color: ${theme.palette.grey[600]};
     }
 
     .tabulator-row.tabulator-selected .tabulator-cell {
-      background-color: #9abcea;
+      background-color: ${theme.palette.primary.light};
     }
 
     .tabulator-row.tabulator-selected:hover .tabulator-cell {
-      background-color: #769bcc;
+      background-color: ${theme.palette.primary.main};
       cursor: pointer;
     }
 
@@ -1433,7 +1437,7 @@ export function useTabulatorModernStyles() {
     }
 
     .tabulator-edit-select-list {
-      border: 1px solid #1d68cd;
+      border: 1px solid ${theme.palette.primary.main};
     }
 
     .tabulator-print-table .tabulator-print-table-group {
