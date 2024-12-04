@@ -20,6 +20,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
+import Slider from "@mui/material/Slider";
+import { v4 as uuidv4 } from "uuid";
 
 function copyToClipboard(text: string) {
   navigator.clipboard
@@ -29,6 +31,7 @@ function copyToClipboard(text: string) {
 }
 
 export type TechnologyRow = {
+  id: string;
   technology: string;
   ability: number;
   category: string[];
@@ -36,7 +39,12 @@ export type TechnologyRow = {
 
 const DeleteButton = () => "<button class='delete-btn'>X</button>";
 
-const defaultRow: TechnologyRow = { technology: "", ability: 1, category: [] };
+const defaultRow: TechnologyRow = {
+  id: uuidv4(),
+  technology: "",
+  ability: 1,
+  category: [],
+};
 const initData: TechnologyRow[] = [];
 
 export default function Table() {
@@ -50,9 +58,7 @@ export default function Table() {
   const [dataUrlOpen, setDataUrlOpen] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [currentRowTechnology, setCurrentRowTechnology] = useState<
-    string | null
-  >(null);
+  const [currentRow, setCurrentRow] = useState<TechnologyRow | null>(null);
 
   const styles = useTabulatorModernStyles();
   const [searchParams] = useSearchParams();
@@ -90,8 +96,8 @@ export default function Table() {
     });
   };
 
-  const handleDeleteRow = (technology: string) => {
-    const filteredData = data.filter((item) => item.technology !== technology);
+  const handleDeleteRow = (id: string) => {
+    const filteredData = data.filter((item) => item.id !== id);
     handleDataChanged(filteredData);
   };
 
@@ -105,24 +111,19 @@ export default function Table() {
     setDataUrlOpen(dataUrl);
   };
 
-  const handleCellClick = (cell: CellComponent) => {
-    if (!cell || !cell.getRow()) {
-      console.error(
-        "The row this cell is attached to cannot be found. Ensure the table has not been reinitialized without being destroyed first."
-      );
-      return;
-    }
-    setCurrentRowTechnology(cell.getRow().getData().technology);
-    setSelectedCategories(cell.getValue() || []);
+  const handleRowClick = (_e: PointerEvent, row: CellComponent) => {
+    const rowData = row.getData() as TechnologyRow;
+    setCurrentRow(rowData);
+    setSelectedCategories(rowData.category || []);
     setDialogOpen(true);
   };
 
-  // When saving categories, find the row using the technology
-  const saveCategories = () => {
-    if (currentRowTechnology) {
+  // When saving, update the row with the new values
+  const saveRow = () => {
+    if (currentRow) {
       const updatedData = data.map((row) => {
-        if (row.technology === currentRowTechnology) {
-          return { ...row, category: selectedCategories };
+        if (row.id === currentRow.id) {
+          return { ...currentRow, category: selectedCategories };
         }
         return row;
       });
@@ -143,7 +144,6 @@ export default function Table() {
       field: "ability",
       hozAlign: "center",
       formatter: "star",
-      editor: true,
       formatterParams: {
         stars: 10,
       },
@@ -151,14 +151,20 @@ export default function Table() {
     {
       title: "Category",
       field: "category",
-      cellClick: (_e: unknown, cell: CellComponent) => handleCellClick(cell),
     },
   ];
 
   return (
     <div css={styles}>
       <ReactTabulator
-        events={{ dataChanged: handleDataChanged }}
+        events={{
+          dataChanged: handleDataChanged,
+          rowClick: (e: PointerEvent, row: CellComponent) => {
+            if (e.target && !(e.target as Element).closest(".delete-btn")) {
+              handleRowClick(e, row);
+            }
+          },
+        }}
         data={data}
         options={{
           movableColumns: true,
@@ -181,7 +187,7 @@ export default function Table() {
                   open: true,
                   callback: (confirmResult: boolean) => {
                     if (confirmResult)
-                      handleDeleteRow(cell.getRow().getData().technology);
+                      handleDeleteRow(cell.getRow().getData().id);
                     setDeleteRowOpen(defaultConfirmCallback);
                   },
                 });
@@ -193,7 +199,9 @@ export default function Table() {
       />
       <Stack direction="row" spacing={2}>
         <Button
-          onClick={() => handleDataChanged([...data, defaultRow])}
+          onClick={() =>
+            handleDataChanged([...data, { ...defaultRow, id: uuidv4() }])
+          }
           text="Add Row"
         />
         <Button
@@ -236,14 +244,32 @@ export default function Table() {
           },
         }}
       >
-        <DialogTitle>Edit Categories</DialogTitle>
+        <DialogTitle>Edit Row</DialogTitle>
         <DialogContent dividers>
           <TextField
             label="Technology"
-            value={currentRowTechnology || ""}
+            value={currentRow?.technology || ""}
+            onChange={(e) => {
+              setCurrentRow((prev) =>
+                prev ? { ...prev, technology: e.target.value } : null
+              );
+            }}
             variant="outlined"
             fullWidth
-            InputProps={{ readOnly: true }}
+            style={{ marginBottom: "16px" }}
+          />
+          <Slider
+            value={currentRow?.ability || 1}
+            onChange={(_e, newValue) =>
+              setCurrentRow((prev) =>
+                prev ? { ...prev, ability: newValue as number } : null
+              )
+            }
+            min={1}
+            max={10}
+            step={1}
+            marks
+            valueLabelDisplay="auto"
             style={{ marginBottom: "16px" }}
           />
           <Autocomplete
@@ -264,7 +290,7 @@ export default function Table() {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDialogOpen(false)} text="Cancel" />
-          <Button onClick={saveCategories} text="Save" />
+          <Button onClick={saveRow} text="Save" />
         </DialogActions>
       </Dialog>
     </div>
