@@ -1,4 +1,4 @@
-import { dataKey } from "@src/constants";
+import { DATA_KEY } from "@src/constants";
 import { useEffect, useMemo, useState } from "react";
 import { Chart, registerables } from "chart.js";
 import localforage from "localforage";
@@ -30,7 +30,7 @@ export default function Graph() {
   const [chartType, setChartType] = useState<string>("bar");
 
   useEffect(() => {
-    localforage.getItem(dataKey, function (err, value) {
+    localforage.getItem(DATA_KEY, function (err, value) {
       if (err) throw err;
 
       if (value) setData(value as TechnologyRow[]);
