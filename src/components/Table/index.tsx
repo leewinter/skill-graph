@@ -1,5 +1,5 @@
 import { ReactTabulator } from "react-tabulator";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import localforage from "localforage";
 import { CellComponent } from "tabulator-tables";
 import Button from "@src/components/Button";
@@ -14,16 +14,18 @@ import {
 import { InfoDialog } from "@src/components/InfoDialog/Index";
 import { useTabulatorModernStyles } from "./use-tabulator-modern-styles";
 import Stack from "@mui/material/Stack";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 
 function copyToClipboard(text: string) {
   navigator.clipboard
     .writeText(text)
-    .then(() => {
-      console.log("Text copied to clipboard");
-    })
-    .catch((err) => {
-      console.error("Failed to copy text: ", err);
-    });
+    .then(() => console.log("Text copied to clipboard"))
+    .catch((err) => console.error("Failed to copy text: ", err));
 }
 
 export type TechnologyRow = {
@@ -32,43 +34,9 @@ export type TechnologyRow = {
   category: string[];
 };
 
-const DeleteButton = function () {
-  return "<button class='delete-btn'>X</button>";
-};
-
-const columns = [
-  {
-    title: "Technology",
-    field: "technology",
-    editor: "input",
-    validator: ["required", "unique"],
-  },
-  {
-    title: "Ability",
-    field: "ability",
-    hozAlign: "center",
-    formatter: "star",
-    editor: true,
-    formatterParams: {
-      stars: 10,
-    },
-  },
-  {
-    title: "Category",
-    field: "category",
-    editor: "list",
-    sorter: "array",
-    editorParams: {
-      values: ["Infrastructure", "UI", "Cloud", "Backend", "Data"],
-      multiselect: true,
-      clearable: true,
-      verticalNavigation: "hybrid",
-    },
-  },
-];
+const DeleteButton = () => "<button class='delete-btn'>X</button>";
 
 const defaultRow: TechnologyRow = { technology: "", ability: 1, category: [] };
-
 const initData: TechnologyRow[] = [];
 
 export default function Table() {
@@ -80,51 +48,51 @@ export default function Table() {
     defaultConfirmCallback
   );
   const [dataUrlOpen, setDataUrlOpen] = useState<string | null>(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [currentRowTechnology, setCurrentRowTechnology] = useState<
+    string | null
+  >(null);
 
   const styles = useTabulatorModernStyles();
-
-  const table = useRef<any>();
-
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
     if (searchParams.has("data")) {
+      const base64Data = searchParams.get("data");
       const confirmation = {
         open: true,
         callback: (confirmResult: boolean) => {
-          const base64Data = searchParams.get("data");
-          if (base64Data) {
+          if (base64Data && confirmResult) {
             const jsonData = base64AsData<TechnologyRow[]>(base64Data);
-            if (confirmResult && jsonData) {
-              handleDataChanged(jsonData);
-            }
+            if (jsonData) handleDataChanged(jsonData);
           }
           setImportDataOpen(defaultConfirmCallback);
         },
       };
       setImportDataOpen(confirmation);
     } else {
-      localforage.getItem(dataKey, function (err, value) {
+      localforage.getItem(dataKey, (err, value) => {
         if (err) throw err;
         if (value) setData(value as TechnologyRow[]);
       });
     }
-  }, []);
+  }, [searchParams]);
 
-  const handleDataChanged = (d: TechnologyRow[]) => {
-    const withOnlyUnique = d.map((n: TechnologyRow) => {
-      return { ...n, category: [...new Set(n.category)] };
-    });
-    setData(withOnlyUnique);
-    localforage.setItem(dataKey, withOnlyUnique, function (err) {
+  const handleDataChanged = (updatedData: TechnologyRow[]) => {
+    const uniqueCategories = updatedData.map((item) => ({
+      ...item,
+      category: [...new Set(item.category)],
+    }));
+    setData(uniqueCategories);
+    localforage.setItem(dataKey, uniqueCategories, (err) => {
       if (err) throw err;
     });
   };
 
-  const handleDeleteRow = (cell: CellComponent) => {
-    const cellData = cell.getData();
-    const result = data.filter((n) => n.technology !== cellData.technology);
-    handleDataChanged(result);
+  const handleDeleteRow = (technology: string) => {
+    const filteredData = data.filter((item) => item.technology !== technology);
+    handleDataChanged(filteredData);
   };
 
   const handleDataUrlToClipboard = () => {
@@ -137,13 +105,60 @@ export default function Table() {
     setDataUrlOpen(dataUrl);
   };
 
+  const handleCellClick = (cell: CellComponent) => {
+    if (!cell || !cell.getRow()) {
+      console.error(
+        "The row this cell is attached to cannot be found. Ensure the table has not been reinitialized without being destroyed first."
+      );
+      return;
+    }
+    setCurrentRowTechnology(cell.getRow().getData().technology);
+    setSelectedCategories(cell.getValue() || []);
+    setDialogOpen(true);
+  };
+
+  // When saving categories, find the row using the technology
+  const saveCategories = () => {
+    if (currentRowTechnology) {
+      const updatedData = data.map((row) => {
+        if (row.technology === currentRowTechnology) {
+          return { ...row, category: selectedCategories };
+        }
+        return row;
+      });
+      handleDataChanged(updatedData);
+    }
+    setDialogOpen(false);
+  };
+
+  const columns = [
+    {
+      title: "Technology",
+      field: "technology",
+      editor: "input",
+      validator: ["required", "unique"],
+    },
+    {
+      title: "Ability",
+      field: "ability",
+      hozAlign: "center",
+      formatter: "star",
+      editor: true,
+      formatterParams: {
+        stars: 10,
+      },
+    },
+    {
+      title: "Category",
+      field: "category",
+      cellClick: (_e: unknown, cell: CellComponent) => handleCellClick(cell),
+    },
+  ];
+
   return (
     <div css={styles}>
       <ReactTabulator
-        events={{
-          dataChanged: handleDataChanged,
-        }}
-        onRef={(ref) => (table.current = ref.current)}
+        events={{ dataChanged: handleDataChanged }}
         data={data}
         options={{
           movableColumns: true,
@@ -155,15 +170,21 @@ export default function Table() {
               width: 40,
               hozAlign: "center",
               headerSort: false,
-              cellClick: function (_e: PointerEvent, cell: CellComponent) {
-                const confirmation = {
+              cellClick: (_e: PointerEvent, cell: CellComponent) => {
+                if (!cell || !cell.getRow()) {
+                  console.error(
+                    "The row this cell is attached to cannot be found. Ensure the table has not been reinitialized without being destroyed first."
+                  );
+                  return;
+                }
+                setDeleteRowOpen({
                   open: true,
                   callback: (confirmResult: boolean) => {
-                    if (confirmResult) handleDeleteRow(cell);
+                    if (confirmResult)
+                      handleDeleteRow(cell.getRow().getData().technology);
                     setDeleteRowOpen(defaultConfirmCallback);
                   },
-                };
-                setDeleteRowOpen(confirmation);
+                });
               },
             },
           ],
@@ -172,9 +193,7 @@ export default function Table() {
       />
       <Stack direction="row" spacing={2}>
         <Button
-          onClick={() => {
-            handleDataChanged([...data, defaultRow]);
-          }}
+          onClick={() => handleDataChanged([...data, defaultRow])}
           text="Add Row"
         />
         <Button
@@ -205,6 +224,49 @@ export default function Table() {
         message="Url copied to the clipboard"
         url={dataUrlOpen}
       />
+      <Dialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        fullWidth
+        maxWidth="sm"
+        PaperProps={{
+          style: {
+            minHeight: "300px",
+            padding: "20px",
+          },
+        }}
+      >
+        <DialogTitle>Edit Categories</DialogTitle>
+        <DialogContent dividers>
+          <TextField
+            label="Technology"
+            value={currentRowTechnology || ""}
+            variant="outlined"
+            fullWidth
+            InputProps={{ readOnly: true }}
+            style={{ marginBottom: "16px" }}
+          />
+          <Autocomplete
+            fullWidth
+            multiple
+            options={["Infrastructure", "UI", "Cloud", "Backend", "Data"]}
+            value={selectedCategories}
+            onChange={(_event, newValue) => setSelectedCategories(newValue)}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Categories"
+                variant="outlined"
+                fullWidth
+              />
+            )}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDialogOpen(false)} text="Cancel" />
+          <Button onClick={saveCategories} text="Save" />
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
