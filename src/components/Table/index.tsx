@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import localforage from "localforage";
 import { CellComponent } from "tabulator-tables";
 import Button from "@src/components/Button";
-import { dataKey } from "@src/constants";
+import { DATA_KEY } from "@src/constants";
 import { useSearchParams } from "react-router-dom";
 import { base64AsData, dataAsBase64 } from "@src/utils/base64";
 import {
@@ -78,7 +78,7 @@ export default function Table() {
       };
       setImportDataOpen(confirmation);
     } else {
-      localforage.getItem(dataKey, (err, value) => {
+      localforage.getItem(DATA_KEY, (err, value) => {
         if (err) throw err;
         if (value) setData(value as TechnologyRow[]);
       });
@@ -91,7 +91,7 @@ export default function Table() {
       category: [...new Set(item.category)],
     }));
     setData(uniqueCategories);
-    localforage.setItem(dataKey, uniqueCategories, (err) => {
+    localforage.setItem(DATA_KEY, uniqueCategories, (err) => {
       if (err) throw err;
     });
   };
