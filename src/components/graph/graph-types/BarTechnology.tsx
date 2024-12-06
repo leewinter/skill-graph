@@ -1,4 +1,4 @@
-import { TechnologyRow } from "@src/components/Table";
+import { TechnologyRow } from "@src/components/Table/table-types";
 import { useWindowResize } from "@src/hooks/useWindowResize";
 import { Bar } from "react-chartjs-2";
 

@@ -1,9 +1,10 @@
+import { css, Global, ThemeProvider } from "@emotion/react";
+import { CssBaseline } from "@mui/material";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
 import { HashRouter } from "react-router-dom";
-import { ThemeProvider, Global, css } from "@emotion/react";
-import { CssBaseline } from "@mui/material";
+
+import App from "./App.tsx";
 import theme from "./theme";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

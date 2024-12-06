@@ -1,10 +1,10 @@
-import { Routes, Route } from "react-router-dom";
+import Container from "@mui/material/Container";
+import Graph from "@src/components/graph";
 import Home from "@src/components/Home";
 import Layout from "@src/components/Layout";
-import Table from "@src/components/Table";
-import Graph from "@src/components/graph";
 import NotFound from "@src/components/NotFound";
-import Container from "@mui/material/Container";
+import Table from "@src/components/Table";
+import { Route, Routes } from "react-router-dom";
 
 function App() {
   return (
