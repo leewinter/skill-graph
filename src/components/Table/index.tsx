@@ -14,14 +14,9 @@ import {
 import { InfoDialog } from "@src/components/InfoDialog/Index";
 import { useTabulatorModernStyles } from "./use-tabulator-modern-styles";
 import Stack from "@mui/material/Stack";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
-import Slider from "@mui/material/Slider";
 import { v4 as uuidv4 } from "uuid";
+import { TechnologyRow } from "./table-types";
+import EditRowDialog from "./EditRowDialog";
 
 function copyToClipboard(text: string) {
   navigator.clipboard
@@ -29,13 +24,6 @@ function copyToClipboard(text: string) {
     .then(() => console.log("Text copied to clipboard"))
     .catch((err) => console.error("Failed to copy text: ", err));
 }
-
-export type TechnologyRow = {
-  id: string;
-  technology: string;
-  ability: number;
-  category: string[];
-};
 
 const DeleteButton = () => "<button class='delete-btn'>X</button>";
 
@@ -238,67 +226,15 @@ export default function Table() {
         message="Url copied to the clipboard"
         url={dataUrlOpen}
       />
-      <Dialog
+      <EditRowDialog
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
-        fullWidth
-        maxWidth="sm"
-        PaperProps={{
-          style: {
-            minHeight: "300px",
-            padding: "20px",
-          },
-        }}
-      >
-        <DialogTitle>Edit Row</DialogTitle>
-        <DialogContent dividers>
-          <TextField
-            label="Technology"
-            value={currentRow?.technology || ""}
-            onChange={(e) => {
-              setCurrentRow((prev) =>
-                prev ? { ...prev, technology: e.target.value } : null
-              );
-            }}
-            variant="outlined"
-            fullWidth
-            style={{ marginBottom: "16px" }}
-          />
-          <Slider
-            value={currentRow?.ability || 1}
-            onChange={(_e, newValue) =>
-              setCurrentRow((prev) =>
-                prev ? { ...prev, ability: newValue as number } : null
-              )
-            }
-            min={1}
-            max={10}
-            step={1}
-            marks
-            valueLabelDisplay="auto"
-            style={{ marginBottom: "16px" }}
-          />
-          <Autocomplete
-            fullWidth
-            multiple
-            options={["Infrastructure", "UI", "Cloud", "Backend", "Data"]}
-            value={selectedCategories}
-            onChange={(_event, newValue) => setSelectedCategories(newValue)}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Categories"
-                variant="outlined"
-                fullWidth
-              />
-            )}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDialogOpen(false)} text="Cancel" />
-          <Button onClick={saveRow} text="Save" />
-        </DialogActions>
-      </Dialog>
+        currentRow={currentRow}
+        setCurrentRow={setCurrentRow}
+        selectedCategories={selectedCategories}
+        setSelectedCategories={setSelectedCategories}
+        saveRow={saveRow}
+      />
     </div>
   );
 }
