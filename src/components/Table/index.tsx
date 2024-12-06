@@ -151,6 +151,12 @@ export default function Table() {
     {
       title: "Category",
       field: "category",
+      sorter: (a: string[], b: string[]) => {
+        const aString = a.join(", ");
+        const bString = b.join(", ");
+        return aString.localeCompare(bString);
+      },
+      formatter: (cell: CellComponent) => cell.getValue().join(", "),
     },
   ];
 
