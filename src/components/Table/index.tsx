@@ -14,25 +14,13 @@ import {
 import { InfoDialog } from "@src/components/InfoDialog/Index";
 import { useTabulatorModernStyles } from "./use-tabulator-modern-styles";
 import Stack from "@mui/material/Stack";
-import { v4 as uuidv4 } from "uuid";
-import { TechnologyRow } from "./table-types";
-import EditRowDialog from "./EditRowDialog";
 
-function copyToClipboard(text: string) {
-  navigator.clipboard
-    .writeText(text)
-    .then(() => console.log("Text copied to clipboard"))
-    .catch((err) => console.error("Failed to copy text: ", err));
-}
+import { TechnologyRow, getDefaultRow } from "./table-types";
+import EditRowDialog from "./EditRowDialog";
+import { copyToClipboard } from "@src/utils/clipboard";
 
 const DeleteButton = () => "<button class='delete-btn'>X</button>";
 
-const defaultRow: TechnologyRow = {
-  id: uuidv4(),
-  technology: "",
-  ability: 1,
-  category: [],
-};
 const initData: TechnologyRow[] = [];
 
 export default function Table() {
@@ -193,9 +181,7 @@ export default function Table() {
       />
       <Stack direction="row" spacing={2}>
         <Button
-          onClick={() =>
-            handleDataChanged([...data, { ...defaultRow, id: uuidv4() }])
-          }
+          onClick={() => handleDataChanged([...data, { ...getDefaultRow() }])}
           text="Add Row"
         />
         <Button
