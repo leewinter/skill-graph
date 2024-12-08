@@ -1,38 +1,26 @@
-import { ReactTabulator } from "react-tabulator";
-import { useEffect, useState } from "react";
-import localforage from "localforage";
-import { CellComponent } from "tabulator-tables";
+import Stack from "@mui/material/Stack";
 import Button from "@src/components/Button";
-import { DATA_KEY } from "@src/constants";
-import { useSearchParams } from "react-router-dom";
-import { base64AsData, dataAsBase64 } from "@src/utils/base64";
 import {
-  ConfirmDialog,
   ConfirmationCallback,
+  ConfirmDialog,
   defaultConfirmCallback,
 } from "@src/components/ConfirmDialog";
 import { InfoDialog } from "@src/components/InfoDialog/Index";
-import { useTabulatorModernStyles } from "./use-tabulator-modern-styles";
-import Stack from "@mui/material/Stack";
-import { v4 as uuidv4 } from "uuid";
-import { TechnologyRow } from "./table-types";
-import EditRowDialog from "./EditRowDialog";
+import { DATA_KEY } from "@src/constants";
+import { base64AsData, dataAsBase64 } from "@src/utils/base64";
+import { copyToClipboard } from "@src/utils/clipboard";
+import localforage from "localforage";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { ReactTabulator } from "react-tabulator";
+import { CellComponent } from "tabulator-tables";
 
-function copyToClipboard(text: string) {
-  navigator.clipboard
-    .writeText(text)
-    .then(() => console.log("Text copied to clipboard"))
-    .catch((err) => console.error("Failed to copy text: ", err));
-}
+import EditRowDialog from "./EditRowDialog";
+import { getDefaultRow, TechnologyRow } from "./table-types";
+import { useTabulatorModernStyles } from "./use-tabulator-modern-styles";
 
 const DeleteButton = () => "<button class='delete-btn'>X</button>";
 
-const defaultRow: TechnologyRow = {
-  id: uuidv4(),
-  technology: "",
-  ability: 1,
-  category: [],
-};
 const initData: TechnologyRow[] = [];
 
 export default function Table() {
@@ -193,9 +181,7 @@ export default function Table() {
       />
       <Stack direction="row" spacing={2}>
         <Button
-          onClick={() =>
-            handleDataChanged([...data, { ...defaultRow, id: uuidv4() }])
-          }
+          onClick={() => handleDataChanged([...data, { ...getDefaultRow() }])}
           text="Add Row"
         />
         <Button

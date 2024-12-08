@@ -1,11 +1,12 @@
+import Autocomplete from "@mui/material/Autocomplete";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
 import Slider from "@mui/material/Slider";
+import TextField from "@mui/material/TextField";
 import Button from "@src/components/Button";
+
 import { TechnologyRow } from "./table-types";
 
 export default function EditRowDialog({
