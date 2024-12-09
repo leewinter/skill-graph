@@ -1,23 +1,23 @@
-import { ReactTabulator } from "react-tabulator";
-import { useEffect, useState } from "react";
-import localforage from "localforage";
-import { CellComponent } from "tabulator-tables";
+import Stack from "@mui/material/Stack";
 import Button from "@src/components/Button";
-import { DATA_KEY } from "@src/constants";
-import { useSearchParams } from "react-router-dom";
-import { base64AsData, dataAsBase64 } from "@src/utils/base64";
 import {
-  ConfirmDialog,
   ConfirmationCallback,
+  ConfirmDialog,
   defaultConfirmCallback,
 } from "@src/components/ConfirmDialog";
 import { InfoDialog } from "@src/components/InfoDialog/Index";
-import { useTabulatorModernStyles } from "./use-tabulator-modern-styles";
-import Stack from "@mui/material/Stack";
-
-import { TechnologyRow, getDefaultRow } from "./table-types";
-import EditRowDialog from "./EditRowDialog";
+import { DATA_KEY } from "@src/constants";
+import { base64AsData, dataAsBase64 } from "@src/utils/base64";
 import { copyToClipboard } from "@src/utils/clipboard";
+import localforage from "localforage";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { ReactTabulator } from "react-tabulator";
+import { CellComponent } from "tabulator-tables";
+
+import EditRowDialog from "./EditRowDialog";
+import { getDefaultRow, TechnologyRow } from "./table-types";
+import { useTabulatorModernStyles } from "./use-tabulator-modern-styles";
 
 const DeleteButton = () => "<button class='delete-btn'>X</button>";
 

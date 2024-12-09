@@ -1,21 +1,22 @@
-import { DATA_KEY } from "@src/constants";
-import { useEffect, useMemo, useState } from "react";
-import { Chart, registerables } from "chart.js";
-import localforage from "localforage";
-import { TechnologyRow } from "@src/components/Table";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import { extractUniqueCatgories } from "./graphHelpers";
-import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormGroup from "@mui/material/FormGroup";
 import InputLabel from "@mui/material/InputLabel";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Typography from "@mui/material/Typography";
+import { TechnologyRow } from "@src/components/Table/table-types";
+import { DATA_KEY } from "@src/constants";
+import { Chart, registerables } from "chart.js";
+import localforage from "localforage";
+import { useEffect, useMemo, useState } from "react";
+
 import BarTechnology from "./graph-types/BarTechnology";
 import PieTechnology from "./graph-types/PieTechnology";
 import RadarTechnology from "./graph-types/RadarTechnology";
+import { extractUniqueCatgories } from "./graphHelpers";
 
 Chart.register(...registerables);
 
