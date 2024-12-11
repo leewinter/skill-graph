@@ -85,7 +85,7 @@ export default function EditRowDialog({
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} text="Cancel" />
-        <Button onClick={saveRow} text="Save" />
+        <Button onClick={saveRow} text="Update" />
       </DialogActions>
     </Dialog>
   );
