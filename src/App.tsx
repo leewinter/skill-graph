@@ -3,7 +3,7 @@ import Graph from "@src/components/graph";
 import Home from "@src/components/Home";
 import Layout from "@src/components/Layout";
 import NotFound from "@src/components/NotFound";
-import Table from "@src/components/Table";
+import Profiles from "@src/components/Profiles";
 import { Route, Routes } from "react-router-dom";
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="table" element={<Table />} />
+          <Route path="profiles" element={<Profiles />} />
           <Route path="graph" element={<Graph />} />
           <Route path="*" element={<NotFound />} />
         </Route>

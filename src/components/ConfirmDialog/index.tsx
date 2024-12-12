@@ -15,11 +15,13 @@ export interface ConfirmDialogProps {
 export type ConfirmationCallback = {
   open: boolean;
   callback: (confirm: boolean) => void;
+  message: string;
 };
 
 export const defaultConfirmCallback = {
   open: false,
   callback: () => {},
+  message: "",
 };
 
 export function ConfirmDialog(props: ConfirmDialogProps) {

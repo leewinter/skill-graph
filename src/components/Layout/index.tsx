@@ -29,7 +29,7 @@ export default function Layout() {
         <Toolbar>
           <div css={styles}>
             <NavLink to="/">Home</NavLink>
-            <NavLink to="/table">Table</NavLink>
+            <NavLink to="/profiles">Profiles</NavLink>
             <NavLink to="/graph">Graph</NavLink>
           </div>
         </Toolbar>
