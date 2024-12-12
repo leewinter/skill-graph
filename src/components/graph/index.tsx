@@ -8,11 +8,13 @@ import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
 import { TechnologyRow } from "@src/components/Table/table-types";
-import { DATA_KEY } from "@src/constants";
+import { PROFILES_DATA_KEY } from "@src/constants";
 import { Chart, registerables } from "chart.js";
 import localforage from "localforage";
 import { useEffect, useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 
+import { ProfileRow } from "../Profiles/profile-table-types";
 import BarTechnology from "./graph-types/BarTechnology";
 import PieTechnology from "./graph-types/PieTechnology";
 import RadarTechnology from "./graph-types/RadarTechnology";
@@ -29,14 +31,18 @@ export default function Graph() {
   const [data, setData] = useState<TechnologyRow[]>([]);
   const [categories, setCategories] = useState<CategoryCheckbox[]>([]);
   const [chartType, setChartType] = useState<string>("bar");
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const profileId = queryParams.get("profile-id");
 
   useEffect(() => {
-    localforage.getItem(DATA_KEY, function (err, value) {
-      if (err) throw err;
-
-      if (value) setData(value as TechnologyRow[]);
-    });
-  }, []);
+    const getProfile = async () => {
+      const value = await localforage.getItem<ProfileRow[]>(PROFILES_DATA_KEY);
+      const p = value?.find((n) => n.id === profileId);
+      if (p) setData(p.technologies as TechnologyRow[]);
+    };
+    if (profileId) getProfile();
+  }, [profileId]);
 
   useEffect(() => {
     if (data.length) {
@@ -64,6 +70,8 @@ export default function Graph() {
     );
     return technologies;
   }, [data, categories]);
+
+  if (!data.length) return null;
 
   const handleCheckboxChecked = (cat: CategoryCheckbox) => {
     setCategories([

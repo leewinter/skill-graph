@@ -11,7 +11,7 @@ import { base64AsData, dataAsBase64 } from "@src/utils/base64";
 import { copyToClipboard } from "@src/utils/clipboard";
 import localforage from "localforage";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { ReactTabulator } from "react-tabulator";
 import { CellComponent } from "tabulator-tables";
 
@@ -19,8 +19,9 @@ import { useTabulatorModernStyles } from "../Table/use-tabulator-modern-styles";
 import EditRowDialog from "./EditRowDialog";
 import { getDefaultRow, ProfileRow } from "./profile-table-types";
 
-const DeleteButton = () => "<button class='delete-btn'>X</button>";
-const CopyUrlButton = () => "<button class='copy-btn'>⎘</button>";
+const DeleteButton = () => "<button class='delete-btn'>🗑️</button>";
+const CopyUrlButton = () => "<button class='copy-btn'>🗐</button>";
+const GraphButton = () => "<button class='graph-btn'>📈</button>";
 
 const initData: ProfileRow[] = [];
 
@@ -35,6 +36,8 @@ export default function ProfilesTable() {
   const [dataUrlOpen, setDataUrlOpen] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [currentRow, setCurrentRow] = useState<ProfileRow | null>(null);
+
+  const navigate = useNavigate();
 
   const styles = useTabulatorModernStyles();
   const [searchParams] = useSearchParams();
@@ -155,7 +158,11 @@ export default function ProfilesTable() {
         events={{
           dataChanged: handleDataChanged,
           rowClick: (e: PointerEvent, row: CellComponent) => {
-            const excludedSelectors = [".delete-btn", ".copy-btn"];
+            const excludedSelectors = [
+              ".delete-btn",
+              ".copy-btn",
+              ".graph-btn",
+            ];
             const target = e.target as Element;
 
             if (
@@ -186,6 +193,26 @@ export default function ProfilesTable() {
                 }
                 const rowData = cell.getData() as ProfileRow;
                 handleDataUrlToClipboard(rowData);
+              },
+            },
+            {
+              title: "",
+              formatter: GraphButton,
+              width: 40,
+              hozAlign: "center",
+              headerSort: false,
+              cellClick: (_e: PointerEvent, cell: CellComponent) => {
+                if (!cell || !cell.getRow()) {
+                  console.error(
+                    "The row this cell is attached to cannot be found. Ensure the table has not been reinitialized without being destroyed first."
+                  );
+                  return;
+                }
+                const rowData = cell.getData() as ProfileRow;
+                const queryParams = new URLSearchParams({
+                  "profile-id": rowData.id,
+                }).toString();
+                navigate(`/graph?${queryParams}`);
               },
             },
             {
