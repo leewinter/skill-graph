@@ -30,7 +30,6 @@ export default function Layout() {
           <div css={styles}>
             <NavLink to="/">Home</NavLink>
             <NavLink to="/profiles">Profiles</NavLink>
-            <NavLink to="/graph">Graph</NavLink>
           </div>
         </Toolbar>
       </AppBar>
