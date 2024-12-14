@@ -1,23 +1,23 @@
-import Stack from "@mui/material/Stack";
-import Button from "@src/components/Button";
 import {
-  ConfirmationCallback,
   ConfirmDialog,
+  ConfirmationCallback,
   defaultConfirmCallback,
 } from "@src/components/ConfirmDialog";
-import { InfoDialog } from "@src/components/InfoDialog/Index";
-import { PROFILES_DATA_KEY } from "@src/constants";
+import { ProfileRow, getDefaultRow } from "./profile-table-types";
 import { base64AsData, dataAsBase64 } from "@src/utils/base64";
-import { copyToClipboard } from "@src/utils/clipboard";
-import localforage from "localforage";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ReactTabulator } from "react-tabulator";
-import { CellComponent } from "tabulator-tables";
 
-import { useTabulatorModernStyles } from "../Table/use-tabulator-modern-styles";
+import Button from "@src/components/Button";
+import { CellComponent } from "tabulator-tables";
 import EditRowDialog from "./EditRowDialog";
-import { getDefaultRow, ProfileRow } from "./profile-table-types";
+import { InfoDialog } from "@src/components/InfoDialog/Index";
+import { PROFILES_DATA_KEY } from "@src/constants";
+import { ReactTabulator } from "react-tabulator";
+import Stack from "@mui/material/Stack";
+import { copyToClipboard } from "@src/utils/clipboard";
+import localforage from "localforage";
+import { useTabulatorModernStyles } from "../Table/use-tabulator-modern-styles";
 
 const DeleteButton = () => "<button class='delete-btn'>🗑️</button>";
 const CopyUrlButton = () => "<button class='copy-btn'>🗐</button>";
@@ -123,9 +123,8 @@ export default function ProfilesTable() {
     setDataUrlOpen(dataUrl);
   };
 
-  const handleRowClick = (_e: PointerEvent, row: CellComponent) => {
-    const rowData = row.getData() as ProfileRow;
-    setCurrentRow(rowData);
+  const handleRowClick = (row: ProfileRow) => {
+    setCurrentRow(row);
     setDialogOpen(true);
   };
 
@@ -169,7 +168,8 @@ export default function ProfilesTable() {
               target &&
               !excludedSelectors.some((selector) => target.closest(selector))
             ) {
-              handleRowClick(e, row);
+              const rowData = row.getData() as ProfileRow;
+              handleRowClick(rowData);
             }
           },
         }}
@@ -245,7 +245,11 @@ export default function ProfilesTable() {
       />
       <Stack direction="row" spacing={2}>
         <Button
-          onClick={() => handleDataChanged([...data, { ...getDefaultRow() }])}
+          onClick={() => {
+            const newRow = getDefaultRow();
+            handleDataChanged([...data, { ...newRow }])
+            handleRowClick(newRow);
+          }}
           text="Add Row"
         />
       </Stack>
