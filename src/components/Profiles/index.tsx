@@ -4,26 +4,68 @@ import {
   defaultConfirmCallback,
 } from "@src/components/ConfirmDialog";
 import { ProfileRow, getDefaultRow } from "./profile-table-types";
+import React, { useEffect, useState } from "react";
 import { base64AsData, dataAsBase64 } from "@src/utils/base64";
-import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import Button from "@src/components/Button";
-import { CellComponent } from "tabulator-tables";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import EditRowDialog from "./EditRowDialog";
+import IconButton from "@mui/material/IconButton";
 import { InfoDialog } from "@src/components/InfoDialog/Index";
+import InsightsIcon from '@mui/icons-material/Insights';
 import { PROFILES_DATA_KEY } from "@src/constants";
 import { ReactTabulator } from "react-tabulator";
 import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
 import { copyToClipboard } from "@src/utils/clipboard";
+import { createRoot } from "react-dom/client";
 import localforage from "localforage";
 import { useTabulatorModernStyles } from "../Table/use-tabulator-modern-styles";
 
-const DeleteButton = () => "<button class='delete-btn'>🗑️</button>";
-const CopyUrlButton = () => "<button class='copy-btn'>🗐</button>";
-const GraphButton = () => "<button class='graph-btn'>📈</button>";
-
 const initData: ProfileRow[] = [];
+
+const createActionsFormatter = (handlers: {
+  onEdit: (rowData: ProfileRow) => void;
+  onGraph: (rowData: ProfileRow) => void;
+  onCopy: (rowData: ProfileRow) => void;
+  onDelete: (rowData: ProfileRow) => void;
+}) => {
+  return (cell: any) => {
+    const container = document.createElement("div");
+    const root = createRoot(container);
+
+    const row = cell.getRow();
+    const rowData = row.getData() as ProfileRow;
+
+    root.render(
+      <React.Fragment>
+        <Tooltip title={`Edit row for ${rowData.name}`} arrow placement="left">
+          <IconButton onClick={() => handlers.onEdit(rowData)} aria-label="edit" size="small" color="primary">
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
+        <IconButton onClick={() => handlers.onGraph(rowData)} aria-label="graph" size="small" color="secondary" title={`Show graphs for ${rowData.name}`}>
+          <InsightsIcon />
+        </IconButton>
+        <Tooltip title={`Copy data URL for ${rowData.name}`} arrow placement="left">
+          <IconButton onClick={() => handlers.onCopy(rowData)} aria-label="copy data url" size="small" >
+            <ContentCopyIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title={`Delete profile for ${rowData.name}`} arrow placement="left">
+          <IconButton onClick={() => handlers.onDelete(rowData)} aria-label="delete" size="small" color="error">
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+      </React.Fragment>
+    );
+
+    return container;
+  };
+};
 
 export default function ProfilesTable() {
   const [data, setData] = useState<ProfileRow[]>(initData);
@@ -52,7 +94,7 @@ export default function ProfilesTable() {
       if (searchParams.has("data")) {
         const base64Data = searchParams.get("data");
         let confirmationMessage = "";
-        let confirmationCallback = () => {};
+        let confirmationCallback = () => { };
         if (base64Data) {
           const jsonData = base64AsData<ProfileRow>(base64Data);
           if (jsonData) {
@@ -123,12 +165,30 @@ export default function ProfilesTable() {
     setDataUrlOpen(dataUrl);
   };
 
-  const handleRowClick = (row: ProfileRow) => {
+  const handleRowEditClick = (row: ProfileRow) => {
     setCurrentRow(row);
     setDialogOpen(true);
   };
 
-  // When saving, update the row with the new values
+  const handleRowGraphClick = (row: ProfileRow) => {
+    const queryParams = new URLSearchParams({
+      "profile-id": row.id,
+    }).toString();
+    navigate(`/graph?${queryParams}`);
+  }
+
+  const handleRowDeleteClick = (row: ProfileRow) => {
+    setDeleteRowOpen({
+      open: true,
+      callback: (confirmResult: boolean) => {
+        if (confirmResult)
+          handleDeleteRow(row.id);
+        setDeleteRowOpen(defaultConfirmCallback);
+      },
+      message: "Remove this row?",
+    })
+  }
+
   const saveRow = () => {
     if (currentRow) {
       const updatedData = data.map((row) => {
@@ -146,98 +206,28 @@ export default function ProfilesTable() {
     {
       title: "Name",
       field: "name",
-      editor: "input",
-      validator: ["required", "unique"],
     },
   ];
 
   return (
     <div css={styles}>
       <ReactTabulator
-        events={{
-          dataChanged: handleDataChanged,
-          rowClick: (e: PointerEvent, row: CellComponent) => {
-            const excludedSelectors = [
-              ".delete-btn",
-              ".copy-btn",
-              ".graph-btn",
-            ];
-            const target = e.target as Element;
-
-            if (
-              target &&
-              !excludedSelectors.some((selector) => target.closest(selector))
-            ) {
-              const rowData = row.getData() as ProfileRow;
-              handleRowClick(rowData);
-            }
-          },
-        }}
         data={data}
         options={{
           movableColumns: true,
           columns: [
             ...columns,
             {
-              title: "",
-              formatter: CopyUrlButton,
-              width: 40,
+              title: "Actions",
+              field: "actions",
               hozAlign: "center",
-              headerSort: false,
-              cellClick: (_e: PointerEvent, cell: CellComponent) => {
-                if (!cell || !cell.getRow()) {
-                  console.error(
-                    "The row this cell is attached to cannot be found. Ensure the table has not been reinitialized without being destroyed first."
-                  );
-                  return;
-                }
-                const rowData = cell.getData() as ProfileRow;
-                handleDataUrlToClipboard(rowData);
-              },
-            },
-            {
-              title: "",
-              formatter: GraphButton,
-              width: 40,
-              hozAlign: "center",
-              headerSort: false,
-              cellClick: (_e: PointerEvent, cell: CellComponent) => {
-                if (!cell || !cell.getRow()) {
-                  console.error(
-                    "The row this cell is attached to cannot be found. Ensure the table has not been reinitialized without being destroyed first."
-                  );
-                  return;
-                }
-                const rowData = cell.getData() as ProfileRow;
-                const queryParams = new URLSearchParams({
-                  "profile-id": rowData.id,
-                }).toString();
-                navigate(`/graph?${queryParams}`);
-              },
-            },
-            {
-              title: "",
-              formatter: DeleteButton,
-              width: 40,
-              hozAlign: "center",
-              headerSort: false,
-              cellClick: (_e: PointerEvent, cell: CellComponent) => {
-                if (!cell || !cell.getRow()) {
-                  console.error(
-                    "The row this cell is attached to cannot be found. Ensure the table has not been reinitialized without being destroyed first."
-                  );
-                  return;
-                }
-                setDeleteRowOpen({
-                  open: true,
-                  callback: (confirmResult: boolean) => {
-                    if (confirmResult)
-                      handleDeleteRow(cell.getRow().getData().id);
-                    setDeleteRowOpen(defaultConfirmCallback);
-                  },
-                  message: "Remove this row?",
-                });
-              },
+              width: 150,
+              formatter: createActionsFormatter({
+                onEdit: handleRowEditClick,
+                onGraph: handleRowGraphClick,
+                onCopy: handleDataUrlToClipboard,
+                onDelete: handleRowDeleteClick,
+              }),
             },
           ],
           theme: "Midnight",
@@ -248,7 +238,7 @@ export default function ProfilesTable() {
           onClick={() => {
             const newRow = getDefaultRow();
             handleDataChanged([...data, { ...newRow }])
-            handleRowClick(newRow);
+            handleRowEditClick(newRow);
           }}
           text="Add Row"
         />
