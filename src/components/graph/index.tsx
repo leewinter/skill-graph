@@ -1,3 +1,5 @@
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 import Checkbox from "@mui/material/Checkbox";
 import Divider from "@mui/material/Divider";
 import FormControl from "@mui/material/FormControl";
@@ -56,7 +58,6 @@ export default function Graph() {
     }
   }, [data]);
 
-  // Datasets will filter based on selected categories. If a technology has no category it will always show instead.
   const datasetsFilteredByCategory = useMemo(() => {
     const technologies = data.filter((tech) =>
       categories
@@ -65,7 +66,7 @@ export default function Graph() {
         .some(
           (cat) =>
             tech.category.indexOf(cat) >= 0 ||
-            (tech.category.length == 0 && cat == "Uncategorised")
+            (tech.category.length === 0 && cat === "Uncategorised")
         )
     );
     return technologies;
@@ -75,69 +76,70 @@ export default function Graph() {
 
   const handleCheckboxChecked = (cat: CategoryCheckbox) => {
     setCategories([
-      ...categories.filter((n) => n.category != cat.category),
+      ...categories.filter((n) => n.category !== cat.category),
       { ...cat, checked: !cat.checked },
     ]);
   };
 
-  const handleCahrtChange = (event: SelectChangeEvent) => {
+  const handleChartChange = (event: SelectChangeEvent) => {
     setChartType(event.target.value as string);
   };
 
   return (
     <div>
-      <div style={{ flexDirection: "row" }}>
-        <Typography variant="h6" gutterBottom>
-          Category Filter
-        </Typography>
-        <Divider />
-        <FormControl fullWidth>
-          <FormGroup style={{ flexDirection: "row" }}>
-            {categories
-              .sort((a, b) => a.category.localeCompare(b.category))
-              .map((cat, index) => {
-                return (
-                  <FormControlLabel
-                    key={index}
-                    control={
-                      <Checkbox
-                        checked={cat.checked}
-                        onClick={() => handleCheckboxChecked(cat)}
-                      />
-                    }
-                    label={cat.category}
-                  />
-                );
-              })}
-          </FormGroup>
-        </FormControl>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Chart Type</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={chartType}
-            label="Chart Type"
-            onChange={handleCahrtChange}
-          >
-            <MenuItem value="bar">Bar</MenuItem>
-            <MenuItem value="pie">Pie</MenuItem>
-            <MenuItem value="radar">Radar</MenuItem>
-          </Select>
-        </FormControl>
-      </div>
+      <Typography variant="h6" gutterBottom>
+        Category Filter
+      </Typography>
+      <Divider />
+      <FormControl fullWidth>
+        <FormGroup style={{ flexDirection: "row" }}>
+          {categories
+            .sort((a, b) => a.category.localeCompare(b.category))
+            .map((cat, index) => {
+              return (
+                <FormControlLabel
+                  key={index}
+                  control={
+                    <Checkbox
+                      checked={cat.checked}
+                      onClick={() => handleCheckboxChecked(cat)}
+                    />
+                  }
+                  label={cat.category}
+                />
+              );
+            })}
+        </FormGroup>
+      </FormControl>
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Chart Type</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={chartType}
+          label="Chart Type"
+          onChange={handleChartChange}
+        >
+          <MenuItem value="bar">Bar</MenuItem>
+          <MenuItem value="pie">Pie</MenuItem>
+          <MenuItem value="radar">Radar</MenuItem>
+        </Select>
+      </FormControl>
 
-      <div style={{ display: "flex" }}>
-        {chartType === "bar" ? (
-          <BarTechnology data={datasetsFilteredByCategory} />
-        ) : null}
-        {chartType === "pie" ? (
-          <PieTechnology data={datasetsFilteredByCategory} />
-        ) : null}
-        {chartType === "radar" ? (
-          <RadarTechnology data={datasetsFilteredByCategory} />
-        ) : null}
-      </div>
+      {/* MUI Card Component for Framing */}
+      <Card sx={{ marginTop: 3 }}>
+        <CardContent>
+          {chartType === "bar" && (
+            <BarTechnology data={datasetsFilteredByCategory} />
+          )}
+          {chartType === "pie" && (
+            <PieTechnology data={datasetsFilteredByCategory} />
+          )}
+          {chartType === "radar" && (
+            <RadarTechnology data={datasetsFilteredByCategory} />
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
