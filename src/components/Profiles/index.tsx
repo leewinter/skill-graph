@@ -1,29 +1,29 @@
-import {
-  ConfirmDialog,
-  ConfirmationCallback,
-  defaultConfirmCallback,
-} from "@src/components/ConfirmDialog";
-import { ProfileRow, getDefaultRow } from "./profile-table-types";
-import React, { useEffect, useState } from "react";
-import { base64AsData, dataAsBase64 } from "@src/utils/base64";
-import { useNavigate, useSearchParams } from "react-router-dom";
-
-import Button from "@src/components/Button";
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import EditRowDialog from "./EditRowDialog";
+import InsightsIcon from "@mui/icons-material/Insights";
 import IconButton from "@mui/material/IconButton";
-import { InfoDialog } from "@src/components/InfoDialog/Index";
-import InsightsIcon from '@mui/icons-material/Insights';
-import { PROFILES_DATA_KEY } from "@src/constants";
-import { ReactTabulator } from "react-tabulator";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
+import Button from "@src/components/Button";
+import {
+  ConfirmationCallback,
+  ConfirmDialog,
+  defaultConfirmCallback,
+} from "@src/components/ConfirmDialog";
+import { InfoDialog } from "@src/components/InfoDialog/Index";
+import { PROFILES_DATA_KEY } from "@src/constants";
+import { base64AsData, dataAsBase64 } from "@src/utils/base64";
 import { copyToClipboard } from "@src/utils/clipboard";
-import { createRoot } from "react-dom/client";
 import localforage from "localforage";
+import React, { useEffect, useState } from "react";
+import { createRoot } from "react-dom/client";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { ReactTabulator } from "react-tabulator";
+
 import { useTabulatorModernStyles } from "../Table/use-tabulator-modern-styles";
+import EditRowDialog from "./EditRowDialog";
+import { getDefaultRow, ProfileRow } from "./profile-table-types";
 
 const initData: ProfileRow[] = [];
 
@@ -43,20 +43,48 @@ const createActionsFormatter = (handlers: {
     root.render(
       <React.Fragment>
         <Tooltip title={`Edit row for ${rowData.name}`} arrow placement="left">
-          <IconButton onClick={() => handlers.onEdit(rowData)} aria-label="edit" size="small" color="primary">
+          <IconButton
+            onClick={() => handlers.onEdit(rowData)}
+            aria-label="edit"
+            size="small"
+            color="primary"
+          >
             <EditIcon />
           </IconButton>
         </Tooltip>
-        <IconButton onClick={() => handlers.onGraph(rowData)} aria-label="graph" size="small" color="secondary" title={`Show graphs for ${rowData.name}`}>
+        <IconButton
+          onClick={() => handlers.onGraph(rowData)}
+          aria-label="graph"
+          size="small"
+          color="secondary"
+          title={`Show graphs for ${rowData.name}`}
+        >
           <InsightsIcon />
         </IconButton>
-        <Tooltip title={`Copy data URL for ${rowData.name}`} arrow placement="left">
-          <IconButton onClick={() => handlers.onCopy(rowData)} aria-label="copy data url" size="small" >
+        <Tooltip
+          title={`Copy data URL for ${rowData.name}`}
+          arrow
+          placement="left"
+        >
+          <IconButton
+            onClick={() => handlers.onCopy(rowData)}
+            aria-label="copy data url"
+            size="small"
+          >
             <ContentCopyIcon />
           </IconButton>
         </Tooltip>
-        <Tooltip title={`Delete profile for ${rowData.name}`} arrow placement="left">
-          <IconButton onClick={() => handlers.onDelete(rowData)} aria-label="delete" size="small" color="error">
+        <Tooltip
+          title={`Delete profile for ${rowData.name}`}
+          arrow
+          placement="left"
+        >
+          <IconButton
+            onClick={() => handlers.onDelete(rowData)}
+            aria-label="delete"
+            size="small"
+            color="error"
+          >
             <DeleteIcon />
           </IconButton>
         </Tooltip>
@@ -94,13 +122,13 @@ export default function ProfilesTable() {
       if (searchParams.has("data")) {
         const base64Data = searchParams.get("data");
         let confirmationMessage = "";
-        let confirmationCallback = () => { };
+        let confirmationCallback = () => {};
         if (base64Data) {
           const jsonData = base64AsData<ProfileRow>(base64Data);
           if (jsonData) {
             const dataFromStore = await getDataFromPersistentStore();
             const alreadyExistingProfile = dataFromStore?.find(
-              (n) => n.name === jsonData.name
+              (n) => n.id === jsonData.id
             );
             if (alreadyExistingProfile) {
               confirmationMessage = `Profile already exists for ${jsonData.name}, would you like to update?`;
@@ -175,19 +203,18 @@ export default function ProfilesTable() {
       "profile-id": row.id,
     }).toString();
     navigate(`/graph?${queryParams}`);
-  }
+  };
 
   const handleRowDeleteClick = (row: ProfileRow) => {
     setDeleteRowOpen({
       open: true,
       callback: (confirmResult: boolean) => {
-        if (confirmResult)
-          handleDeleteRow(row.id);
+        if (confirmResult) handleDeleteRow(row.id);
         setDeleteRowOpen(defaultConfirmCallback);
       },
       message: "Remove this row?",
-    })
-  }
+    });
+  };
 
   const saveRow = () => {
     if (currentRow) {
@@ -237,7 +264,7 @@ export default function ProfilesTable() {
         <Button
           onClick={() => {
             const newRow = getDefaultRow();
-            handleDataChanged([...data, { ...newRow }])
+            handleDataChanged([...data, { ...newRow }]);
             handleRowEditClick(newRow);
           }}
           text="Add Row"
