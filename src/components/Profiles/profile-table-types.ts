@@ -1,4 +1,4 @@
-import { TechnologyRow } from "@src/components/Table/table-types";
+import { TechnologyRow } from "@src/components/TechnologyTable/table-types";
 import { v4 as uuidv4 } from "uuid";
 
 export type ProfileRow = {

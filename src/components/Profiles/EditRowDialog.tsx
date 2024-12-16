@@ -4,9 +4,9 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import Button from "@src/components/Button";
-import Table from "@src/components/Table";
+import TechnologyTable from "@src/components/TechnologyTable";
 
-import { TechnologyRow } from "../Table/table-types";
+import { TechnologyRow } from "../TechnologyTable/table-types";
 import { ProfileRow } from "./profile-table-types";
 
 export default function EditRowDialog({
@@ -56,7 +56,7 @@ export default function EditRowDialog({
           fullWidth
           style={{ marginBottom: "16px" }}
         />
-        <Table
+        <TechnologyTable
           initData={currentRow.technologies}
           onDataChange={handleTechnologiesChange}
         />

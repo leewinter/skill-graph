@@ -9,7 +9,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Typography from "@mui/material/Typography";
-import { TechnologyRow } from "@src/components/Table/table-types";
+import { TechnologyRow } from "@src/components/TechnologyTable/table-types";
 import { PROFILES_DATA_KEY } from "@src/constants";
 import { Chart, registerables } from "chart.js";
 import localforage from "localforage";

@@ -15,7 +15,7 @@ import { useTabulatorModernStyles } from "./use-tabulator-modern-styles";
 
 const DeleteButton = () => "<button class='delete-btn'>X</button>";
 
-export default function Table({
+export default function TechnologyTable({
   initData,
   onDataChange,
 }: {
