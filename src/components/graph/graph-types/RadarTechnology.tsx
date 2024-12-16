@@ -48,7 +48,7 @@ export default function RadarTechnology(props: { data: TechnologyRow[] }) {
             },
             plugins: {
               legend: {
-                display: true,
+                display: false,
                 position: "top", // Position legend at the top to save vertical space
               },
             },
@@ -74,8 +74,8 @@ export default function RadarTechnology(props: { data: TechnologyRow[] }) {
           ],
         }}
         style={{
-          height: Math.min(dimensions.height * 0.6, 400), // Restrict height dynamically
-          maxHeight: 400,
+          height: Math.min(dimensions.height * 0.6, 300), // Restrict height dynamically
+          maxHeight: 300,
         }}
       />
     </Box>

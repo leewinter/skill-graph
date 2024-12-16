@@ -39,8 +39,7 @@ export default function BarTechnology(props: { data: TechnologyRow[] }) {
           },
           plugins: {
             legend: {
-              display: true,
-              position: "top", // Move legend to the top for vertical space
+              display: false,
             },
           },
           scales: {
@@ -54,7 +53,6 @@ export default function BarTechnology(props: { data: TechnologyRow[] }) {
           datasets: [
             {
               data: data.map((n) => n.ability),
-              label: "Technology",
               backgroundColor: data.map(
                 (_, i) => d3.schemeCategory10[i % d3.schemeCategory10.length]
               ),
