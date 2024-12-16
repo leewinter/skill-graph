@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import { TechnologyRow } from "@src/components/Table/table-types";
+import { TechnologyRow } from "@src/components/TechnologyTable/table-types";
 import { useWindowResize } from "@src/hooks/useWindowResize";
 import * as d3 from "d3-scale-chromatic";
 import { Bar } from "react-chartjs-2";

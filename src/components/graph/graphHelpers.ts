@@ -1,4 +1,4 @@
-import { TechnologyRow } from "../Table/table-types";
+import { TechnologyRow } from "../TechnologyTable/table-types";
 
 export const extractUniqueCatgories = (data: TechnologyRow[]) => {
   let uniqueCategories: string[] = [];

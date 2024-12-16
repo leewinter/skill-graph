@@ -20,8 +20,9 @@ import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ReactTabulator } from "react-tabulator";
+import { CellComponent } from "tabulator-tables";
 
-import { useTabulatorModernStyles } from "../Table/use-tabulator-modern-styles";
+import { useTabulatorModernStyles } from "../TechnologyTable/use-tabulator-modern-styles";
 import EditRowDialog from "./EditRowDialog";
 import { getDefaultRow, ProfileRow } from "./profile-table-types";
 
@@ -33,7 +34,7 @@ const createActionsFormatter = (handlers: {
   onCopy: (rowData: ProfileRow) => void;
   onDelete: (rowData: ProfileRow) => void;
 }) => {
-  return (cell: any) => {
+  return (cell: CellComponent) => {
     const container = document.createElement("div");
     const root = createRoot(container);
 
