@@ -66,8 +66,8 @@ export default function PieTechnology(props: { data: TechnologyRow[] }) {
           ],
         }}
         style={{
-          height: Math.min(dimensions.height * 0.6, 400), // Restrict height dynamically
-          maxHeight: 400,
+          height: Math.min(dimensions.height * 0.6, 300), // Restrict height dynamically
+          maxHeight: 300,
         }}
       />
     </Box>
