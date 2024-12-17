@@ -5,6 +5,7 @@ export type ProfileRow = {
   id: string;
   name: string;
   technologies: TechnologyRow[];
+  newRow: boolean;
 };
 
 export function getDefaultRow(): ProfileRow {
@@ -12,5 +13,6 @@ export function getDefaultRow(): ProfileRow {
     id: uuidv4(),
     name: "",
     technologies: [],
+    newRow: true,
   };
 }
