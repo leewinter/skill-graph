@@ -5,6 +5,8 @@ import { CoreChartOptions, ScriptableContext } from "chart.js";
 import * as d3 from "d3-scale-chromatic";
 import { Radar } from "react-chartjs-2";
 
+import { hexToRgba } from "../graphHelpers";
+
 interface ChartOptionsShim extends CoreChartOptions<"radar"> {
   script: { min: number; max: number };
 }
@@ -64,12 +66,12 @@ export default function RadarTechnology(props: { data: TechnologyRow[] }) {
             {
               data: data.map((n) => n.ability),
               label: "Technology",
-              backgroundColor: colors[0], // Using the first color in the palette
-              borderColor: colors[1], // Optional: Add a border color from the palette
+              backgroundColor: hexToRgba(colors[0], 0.3), // Apply transparency to background
+              borderColor: hexToRgba(colors[1], 0.8), // Slight transparency for border
               pointBackgroundColor: data.map(
-                (_, i) => colors[i % colors.length] // Assign colors cyclically
+                (_, i) => hexToRgba(colors[i % colors.length], 0.8) // Transparent point colors
               ),
-              borderWidth: 0.5,
+              borderWidth: 1,
             },
           ],
         }}

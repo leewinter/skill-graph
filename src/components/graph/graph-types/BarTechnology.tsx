@@ -4,9 +4,10 @@ import { useWindowResize } from "@src/hooks/useWindowResize";
 import * as d3 from "d3-scale-chromatic";
 import { Bar } from "react-chartjs-2";
 
+import { hexToRgba } from "../graphHelpers";
+
 export default function BarTechnology(props: { data: TechnologyRow[] }) {
   const { data } = props;
-
   const { dimensions } = useWindowResize();
 
   return (
@@ -28,18 +29,9 @@ export default function BarTechnology(props: { data: TechnologyRow[] }) {
           indexAxis: "y", // Horizontal bars
           responsive: true,
           maintainAspectRatio: false, // Allow dynamic height adjustment
-          animation: {
-            delay: (context) => {
-              let delay = 0;
-              if (context.type === "data" && context.mode === "default") {
-                delay = context.dataIndex * (1800 / data.length);
-              }
-              return delay;
-            },
-          },
           plugins: {
             legend: {
-              display: false,
+              display: false, // Disable the default legend
             },
           },
           scales: {
@@ -54,7 +46,11 @@ export default function BarTechnology(props: { data: TechnologyRow[] }) {
             {
               data: data.map((n) => n.ability),
               backgroundColor: data.map(
-                (_, i) => d3.schemeCategory10[i % d3.schemeCategory10.length]
+                (_, i) =>
+                  hexToRgba(
+                    d3.schemeCategory10[i % d3.schemeCategory10.length],
+                    0.6
+                  ) // Add transparency
               ),
             },
           ],

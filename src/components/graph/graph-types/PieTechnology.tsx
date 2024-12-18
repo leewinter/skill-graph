@@ -4,6 +4,8 @@ import { useWindowResize } from "@src/hooks/useWindowResize";
 import * as d3 from "d3-scale-chromatic";
 import { Pie } from "react-chartjs-2";
 
+import { hexToRgba } from "../graphHelpers";
+
 export default function PieTechnology(props: { data: TechnologyRow[] }) {
   const { data } = props;
 
@@ -59,7 +61,11 @@ export default function PieTechnology(props: { data: TechnologyRow[] }) {
               data: data.map((n) => n.ability),
               label: "Technology",
               backgroundColor: data.map(
-                (_, i) => d3.schemeCategory10[i % d3.schemeCategory10.length]
+                (_, i) =>
+                  hexToRgba(
+                    d3.schemeCategory10[i % d3.schemeCategory10.length],
+                    0.6
+                  ) // Add transparency
               ),
               borderWidth: 0,
             },
