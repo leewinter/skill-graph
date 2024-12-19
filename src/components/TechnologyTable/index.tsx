@@ -1,3 +1,5 @@
+import Alert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
 import Stack from "@mui/material/Stack";
 import Button from "@src/components/Button";
 import {
@@ -23,14 +25,16 @@ export default function TechnologyTable({
   onDataChange: (technologies: TechnologyRow[]) => void;
 }) {
   const [data, setData] = useState<TechnologyRow[]>(initData);
-
   const [deleteRowOpen, setDeleteRowOpen] = useState<ConfirmationCallback>(
     defaultConfirmCallback
   );
-
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [currentRow, setCurrentRow] = useState<TechnologyRow | null>(null);
+
+  // State for Snackbar
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const styles = useTabulatorModernStyles();
 
@@ -54,9 +58,15 @@ export default function TechnologyTable({
     setDialogOpen(true);
   };
 
-  // When saving, update the row with the new values
   const saveRow = () => {
-    if (currentRow) {
+    if (!currentRow) return;
+
+    // Validate duplicate technology name
+    const technologyAlreadyExists = data.find(
+      (n) => n.technology === currentRow?.technology && n.id !== currentRow.id
+    );
+
+    if (!technologyAlreadyExists) {
       const updatedData = data.map((row) => {
         if (row.id === currentRow.id) {
           return { ...currentRow, category: selectedCategories };
@@ -64,8 +74,17 @@ export default function TechnologyTable({
         return row;
       });
       handleDataChanged(updatedData);
+      setDialogOpen(false);
+    } else {
+      // Show Snackbar if duplicate
+      setSnackbarMessage("Duplicate technology detected!");
+      setSnackbarOpen(true);
     }
+  };
+
+  const handleEditClose = () => {
     setDialogOpen(false);
+    if (currentRow?.newRow) handleDeleteRow(currentRow.id);
   };
 
   const columns = [
@@ -153,6 +172,23 @@ export default function TechnologyTable({
           text="Add Row"
         />
       </Stack>
+
+      {/* Snackbar for duplicate technology warning */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={4000} // Auto-hide after 4 seconds
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={() => setSnackbarOpen(false)}
+          severity="warning"
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
+
       <ConfirmDialog
         id="delete-row-confirmation"
         keepMounted
@@ -162,7 +198,7 @@ export default function TechnologyTable({
       />
       <EditRowDialog
         open={dialogOpen}
-        onClose={() => setDialogOpen(false)}
+        onClose={handleEditClose}
         currentRow={currentRow}
         setCurrentRow={setCurrentRow}
         selectedCategories={selectedCategories}
