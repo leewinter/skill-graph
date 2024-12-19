@@ -5,6 +5,7 @@ export type TechnologyRow = {
   technology: string;
   ability: number;
   category: string[];
+  newRow: boolean;
 };
 
 export function getDefaultRow(): TechnologyRow {
@@ -13,5 +14,6 @@ export function getDefaultRow(): TechnologyRow {
     technology: "",
     ability: 1,
     category: [],
+    newRow: true,
   };
 }
