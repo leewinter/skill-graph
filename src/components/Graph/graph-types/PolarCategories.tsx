@@ -2,19 +2,31 @@ import Box from "@mui/material/Box";
 import { TechnologyRow } from "@src/components/TechnologyTable/table-types";
 import { useWindowResize } from "@src/hooks/useWindowResize";
 import * as d3 from "d3-scale-chromatic";
-import { Pie } from "react-chartjs-2";
+import { PolarArea } from "react-chartjs-2";
 
 import { hexToRgba } from "../graphHelpers";
 
-export default function PieTechnology(props: { data: TechnologyRow[] }) {
+export default function PolarCategories(props: { data: TechnologyRow[] }) {
   const { data } = props;
 
   const { dimensions } = useWindowResize();
+
+  // Calculate the frequency of each category
+  const categoryFrequency = data
+    .flatMap((row) => row.category)
+    .reduce((acc: Record<string, number>, category) => {
+      acc[category] = (acc[category] || 0) + 1;
+      return acc;
+    }, {});
+
+  const labels = Object.keys(categoryFrequency);
+  const frequencies = Object.values(categoryFrequency);
 
   return (
     <Box
       sx={{
         width: "100%",
+        maxWidth: 600,
         height: "auto",
         margin: "0 auto",
         padding: 2,
@@ -22,9 +34,9 @@ export default function PieTechnology(props: { data: TechnologyRow[] }) {
         justifyContent: "center",
       }}
     >
-      <Pie
-        key={`technology-${dimensions.height}-${dimensions.width}`}
-        datasetIdKey="technology"
+      <PolarArea
+        key={`categories-${dimensions.height}-${dimensions.width}`}
+        datasetIdKey="categories"
         options={{
           responsive: true,
           maintainAspectRatio: false,
@@ -32,7 +44,7 @@ export default function PieTechnology(props: { data: TechnologyRow[] }) {
           plugins: {
             title: {
               display: true,
-              text: "Technology Distribution",
+              text: "Category Frequency Distribution",
               font: {
                 size: 18,
                 weight: "bold",
@@ -57,12 +69,12 @@ export default function PieTechnology(props: { data: TechnologyRow[] }) {
           },
         }}
         data={{
-          labels: data.map((n) => n.technology),
+          labels: labels,
           datasets: [
             {
-              data: data.map((n) => n.ability),
-              label: "Technology",
-              backgroundColor: data.map(
+              data: frequencies,
+              label: "Category Frequency",
+              backgroundColor: labels.map(
                 (_, i) =>
                   hexToRgba(
                     d3.schemeCategory10[i % d3.schemeCategory10.length],
