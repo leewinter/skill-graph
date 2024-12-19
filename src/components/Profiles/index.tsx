@@ -217,17 +217,22 @@ export default function ProfilesTable() {
     });
   };
 
-  const saveRow = () => {
+  const handleRowSave = () => {
     if (currentRow) {
       const updatedData = data.map((row) => {
         if (row.id === currentRow.id) {
-          return { ...currentRow };
+          return { ...currentRow, newRow: false };
         }
         return row;
       });
       handleDataChanged(updatedData);
     }
     setDialogOpen(false);
+  };
+
+  const handleEditClose = () => {
+    setDialogOpen(false);
+    if (currentRow?.newRow) handleDeleteRow(currentRow.id);
   };
 
   const columns = [
@@ -295,10 +300,10 @@ export default function ProfilesTable() {
       />
       <EditRowDialog
         open={dialogOpen}
-        onClose={() => setDialogOpen(false)}
+        onClose={handleEditClose}
         currentRow={currentRow}
         setCurrentRow={setCurrentRow}
-        saveRow={saveRow}
+        saveRow={handleRowSave}
       />
     </div>
   );

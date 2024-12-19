@@ -1,5 +1,5 @@
 import Container from "@mui/material/Container";
-import Graph from "@src/components/graph";
+import Graph from "@src/components/Graph";
 import Home from "@src/components/Home";
 import Layout from "@src/components/Layout";
 import NotFound from "@src/components/NotFound";
