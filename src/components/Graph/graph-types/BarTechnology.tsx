@@ -14,9 +14,9 @@ export default function BarTechnology(props: { data: TechnologyRow[] }) {
     <Box
       sx={{
         width: "100%",
-        maxWidth: 800, // Restrict the maximum width for better layout
+        maxWidth: 800,
         height: "auto",
-        margin: "0 auto", // Center horizontally
+        margin: "0 auto",
         padding: 2,
         display: "flex",
         justifyContent: "center",
@@ -26,12 +26,24 @@ export default function BarTechnology(props: { data: TechnologyRow[] }) {
         key={`technology-${dimensions.height}-${dimensions.width}`}
         datasetIdKey="technology"
         options={{
-          indexAxis: "y", // Horizontal bars
+          indexAxis: "y",
           responsive: true,
-          maintainAspectRatio: false, // Allow dynamic height adjustment
+          maintainAspectRatio: false,
           plugins: {
+            title: {
+              display: true,
+              text: "Technology Ability Chart",
+              font: {
+                size: 20,
+                weight: "bold",
+              },
+              padding: {
+                top: 10,
+                bottom: 20,
+              },
+            },
             legend: {
-              display: false, // Disable the default legend
+              display: false,
             },
           },
           scales: {
