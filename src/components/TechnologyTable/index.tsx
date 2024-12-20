@@ -1,13 +1,18 @@
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import Alert from "@mui/material/Alert";
+import IconButton from "@mui/material/IconButton";
 import Snackbar from "@mui/material/Snackbar";
 import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
 import Button from "@src/components/Button";
 import {
   ConfirmationCallback,
   ConfirmDialog,
   defaultConfirmCallback,
 } from "@src/components/ConfirmDialog";
-import { useState } from "react";
+import React, { useState } from "react";
+import { createRoot } from "react-dom/client";
 import { ReactTabulator } from "react-tabulator";
 import { CellComponent } from "tabulator-tables";
 
@@ -15,7 +20,53 @@ import EditRowDialog from "./EditRowDialog";
 import { getDefaultRow, TechnologyRow } from "./table-types";
 import { useTabulatorModernStyles } from "./use-tabulator-modern-styles";
 
-const DeleteButton = () => "<button class='delete-btn'>X</button>";
+const createActionsFormatter = (handlers: {
+  onEdit: (rowData: TechnologyRow) => void;
+  onDelete: (rowData: TechnologyRow) => void;
+}) => {
+  return (cell: CellComponent) => {
+    const container = document.createElement("div");
+    const root = createRoot(container);
+
+    const row = cell.getRow();
+    const rowData = row.getData() as TechnologyRow;
+
+    root.render(
+      <React.Fragment>
+        <Tooltip
+          title={`Edit row for ${rowData.technology}`}
+          arrow
+          placement="left"
+        >
+          <IconButton
+            onClick={() => handlers.onEdit(rowData)}
+            aria-label="edit"
+            size="small"
+            color="primary"
+          >
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip
+          title={`Delete profile for ${rowData.technology}`}
+          arrow
+          placement="left"
+        >
+          <IconButton
+            onClick={() => handlers.onDelete(rowData)}
+            aria-label="delete"
+            size="small"
+            color="error"
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
+      </React.Fragment>
+    );
+
+    return container;
+  };
+};
 
 export default function TechnologyTable({
   initData,
@@ -82,6 +133,22 @@ export default function TechnologyTable({
     }
   };
 
+  const handleRowEditClick = (row: TechnologyRow) => {
+    setCurrentRow(row);
+    setDialogOpen(true);
+  };
+
+  const handleRowDeleteClick = (row: TechnologyRow) => {
+    setDeleteRowOpen({
+      open: true,
+      callback: (confirmResult: boolean) => {
+        if (confirmResult) handleDeleteRow(row.id);
+        setDeleteRowOpen(defaultConfirmCallback);
+      },
+      message: "Remove this row?",
+    });
+  };
+
   const handleEditClose = () => {
     setDialogOpen(false);
     if (currentRow?.newRow) handleDeleteRow(currentRow.id);
@@ -120,43 +187,20 @@ export default function TechnologyTable({
   return (
     <div css={styles}>
       <ReactTabulator
-        events={{
-          dataChanged: handleDataChanged,
-          rowClick: (e: PointerEvent, row: CellComponent) => {
-            if (e.target && !(e.target as Element).closest(".delete-btn")) {
-              const rowData = row.getData() as TechnologyRow;
-              handleRowClick(rowData);
-            }
-          },
-        }}
         data={data}
         options={{
           movableColumns: true,
           columns: [
             ...columns,
             {
-              title: "",
-              formatter: DeleteButton,
-              width: 40,
+              title: "Actions",
+              field: "actions",
               hozAlign: "center",
-              headerSort: false,
-              cellClick: (_e: PointerEvent, cell: CellComponent) => {
-                if (!cell || !cell.getRow()) {
-                  console.error(
-                    "The row this cell is attached to cannot be found. Ensure the table has not been reinitialized without being destroyed first."
-                  );
-                  return;
-                }
-                setDeleteRowOpen({
-                  open: true,
-                  callback: (confirmResult: boolean) => {
-                    if (confirmResult)
-                      handleDeleteRow(cell.getRow().getData().id);
-                    setDeleteRowOpen(defaultConfirmCallback);
-                  },
-                  message: "Remove this row?",
-                });
-              },
+              width: 150,
+              formatter: createActionsFormatter({
+                onEdit: handleRowEditClick,
+                onDelete: handleRowDeleteClick,
+              }),
             },
           ],
           theme: "Midnight",
