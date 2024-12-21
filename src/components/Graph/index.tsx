@@ -126,7 +126,7 @@ export default function Graph() {
               sx={{ display: "flex", flexDirection: "column", height: "100%" }}
             >
               <CardContent>
-                <PolarCategories data={datasetsFilteredByCategory} />
+                <RadarTechnology data={datasetsFilteredByCategory} />
               </CardContent>
             </Card>
           </Grid>
@@ -148,7 +148,7 @@ export default function Graph() {
               sx={{ display: "flex", flexDirection: "column", height: "100%" }}
             >
               <CardContent>
-                <RadarTechnology data={datasetsFilteredByCategory} />
+                <PolarCategories data={datasetsFilteredByCategory} />
               </CardContent>
             </Card>
           </Grid>
