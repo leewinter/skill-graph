@@ -18,6 +18,7 @@ import { useLocation } from "react-router-dom";
 
 import BarTechnology from "./graph-types/BarTechnology";
 import PieTechnology from "./graph-types/PieTechnology";
+import PolarCategories from "./graph-types/PolarCategories";
 import RadarTechnology from "./graph-types/RadarTechnology";
 import { extractUniqueCatgories } from "./graphHelpers";
 
@@ -108,23 +109,44 @@ export default function Graph() {
             </FormGroup>
           </FormControl>
         </Grid>
-        <Grid size={{ xs: 12, md: 8 }}>
-          <Card>
-            <CardContent>
-              <BarTechnology data={datasetsFilteredByCategory} />
-            </CardContent>
-          </Card>
+
+        <Grid size={{ xs: 12, md: 8 }} container spacing={2}>
+          <Grid size={{ xs: 12 }}>
+            <Card
+              sx={{ display: "flex", flexDirection: "column", height: "100%" }}
+            >
+              <CardContent>
+                <BarTechnology data={datasetsFilteredByCategory} />
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid size={{ xs: 12 }}>
+            <Card
+              sx={{ display: "flex", flexDirection: "column", height: "100%" }}
+            >
+              <CardContent>
+                <PolarCategories data={datasetsFilteredByCategory} />
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
+
         <Grid size={{ xs: 12, md: 4 }} container spacing={2}>
-          <Grid size={12}>
-            <Card>
+          <Grid size={{ xs: 12 }}>
+            <Card
+              sx={{ display: "flex", flexDirection: "column", height: "100%" }}
+            >
               <CardContent>
                 <PieTechnology data={datasetsFilteredByCategory} />
               </CardContent>
             </Card>
           </Grid>
-          <Grid size={12}>
-            <Card>
+
+          <Grid size={{ xs: 12 }}>
+            <Card
+              sx={{ display: "flex", flexDirection: "column", height: "100%" }}
+            >
               <CardContent>
                 <RadarTechnology data={datasetsFilteredByCategory} />
               </CardContent>
