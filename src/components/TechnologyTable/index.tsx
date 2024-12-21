@@ -1,72 +1,22 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Alert from "@mui/material/Alert";
+import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Snackbar from "@mui/material/Snackbar";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Button from "@src/components/Button";
 import {
   ConfirmationCallback,
   ConfirmDialog,
   defaultConfirmCallback,
 } from "@src/components/ConfirmDialog";
-import React, { useState } from "react";
-import { createRoot } from "react-dom/client";
-import { ReactTabulator } from "react-tabulator";
-import { CellComponent } from "tabulator-tables";
+import { useState } from "react";
 
 import EditRowDialog from "./EditRowDialog";
 import { getDefaultRow, TechnologyRow } from "./table-types";
-import { useTabulatorModernStyles } from "./use-tabulator-modern-styles";
-
-const createActionsFormatter = (handlers: {
-  onEdit: (rowData: TechnologyRow) => void;
-  onDelete: (rowData: TechnologyRow) => void;
-}) => {
-  return (cell: CellComponent) => {
-    const container = document.createElement("div");
-    const root = createRoot(container);
-
-    const row = cell.getRow();
-    const rowData = row.getData() as TechnologyRow;
-
-    root.render(
-      <React.Fragment>
-        <Tooltip
-          title={`Edit row for ${rowData.technology}`}
-          arrow
-          placement="left"
-        >
-          <IconButton
-            onClick={() => handlers.onEdit(rowData)}
-            aria-label="edit"
-            size="small"
-            color="primary"
-          >
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip
-          title={`Delete profile for ${rowData.technology}`}
-          arrow
-          placement="left"
-        >
-          <IconButton
-            onClick={() => handlers.onDelete(rowData)}
-            aria-label="delete"
-            size="small"
-            color="error"
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      </React.Fragment>
-    );
-
-    return container;
-  };
-};
 
 export default function TechnologyTable({
   initData,
@@ -83,11 +33,9 @@ export default function TechnologyTable({
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [currentRow, setCurrentRow] = useState<TechnologyRow | null>(null);
 
-  // State for Snackbar
+  // Snackbar state
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-
-  const styles = useTabulatorModernStyles();
 
   const handleDataChanged = (updatedData: TechnologyRow[]) => {
     const uniqueCategories = updatedData.map((item) => ({
@@ -154,59 +102,55 @@ export default function TechnologyTable({
     if (currentRow?.newRow) handleDeleteRow(currentRow.id);
   };
 
-  const columns = [
+  const columns: GridColDef[] = [
+    { field: "technology", headerName: "Technology", flex: 1 },
     {
-      title: "Technology",
-      field: "technology",
-      editor: "input",
-      validator: ["required", "unique"],
-    },
-    {
-      title: "Ability",
       field: "ability",
-      hozAlign: "center",
-      formatter: "star",
-      formatterParams: {
-        stars: 10,
-      },
+      headerName: "Ability",
+      flex: 0.5,
+      renderCell: (params) => (
+        <span>
+          {"★".repeat(params.value)}{" "}
+          <span style={{ opacity: 0.3 }}>{"★".repeat(10 - params.value)}</span>
+        </span>
+      ),
     },
     {
-      title: "Category",
       field: "category",
-      sorter: (a: string[], b: string[]) => {
-        const aString = a.join(", ");
-        const bString = b.join(", ");
-        return aString.localeCompare(bString);
-      },
-      formatter: (cell: CellComponent) => cell.getValue().join(", "),
+      headerName: "Category",
+      flex: 1,
+      valueGetter: (params) =>
+        Array.isArray(params.value) ? params.value.join(", ") : "",
+    },
+    {
+      field: "actions",
+      headerName: "Actions",
+      flex: 0.5,
+      renderCell: (params) => (
+        <Box>
+          <Tooltip title="Edit">
+            <IconButton
+              onClick={() => handleRowEditClick(params.row as TechnologyRow)}
+            >
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Delete">
+            <IconButton
+              onClick={() => handleRowDeleteClick(params.row as TechnologyRow)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      ),
     },
   ];
 
-  if (!data) return null;
-
   return (
-    <div css={styles}>
-      <ReactTabulator
-        data={data}
-        options={{
-          movableColumns: true,
-          columns: [
-            ...columns,
-            {
-              title: "Actions",
-              field: "actions",
-              hozAlign: "center",
-              width: 150,
-              formatter: createActionsFormatter({
-                onEdit: handleRowEditClick,
-                onDelete: handleRowDeleteClick,
-              }),
-            },
-          ],
-          theme: "Midnight",
-        }}
-      />
-      <Stack direction="row" spacing={2}>
+    <Box>
+      <DataGrid rows={data} columns={columns} getRowId={(row) => row.id} />
+      <Stack direction="row" spacing={2} sx={{ marginTop: 2 }}>
         <Button
           onClick={() => {
             const newRow = getDefaultRow();
@@ -220,7 +164,7 @@ export default function TechnologyTable({
       {/* Snackbar for duplicate technology warning */}
       <Snackbar
         open={snackbarOpen}
-        autoHideDuration={4000} // Auto-hide after 4 seconds
+        autoHideDuration={4000}
         onClose={() => setSnackbarOpen(false)}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
@@ -249,6 +193,6 @@ export default function TechnologyTable({
         setSelectedCategories={setSelectedCategories}
         saveRow={saveRow}
       />
-    </div>
+    </Box>
   );
 }

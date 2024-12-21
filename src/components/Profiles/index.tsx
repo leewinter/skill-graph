@@ -2,9 +2,11 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import InsightsIcon from "@mui/icons-material/Insights";
+import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import Button from "@src/components/Button";
 import {
   ConfirmationCallback,
@@ -16,85 +18,13 @@ import { PROFILES_DATA_KEY } from "@src/constants";
 import { base64AsData, dataAsBase64 } from "@src/utils/base64";
 import { copyToClipboard } from "@src/utils/clipboard";
 import localforage from "localforage";
-import React, { useEffect, useState } from "react";
-import { createRoot } from "react-dom/client";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ReactTabulator } from "react-tabulator";
-import { CellComponent } from "tabulator-tables";
 
-import { useTabulatorModernStyles } from "../TechnologyTable/use-tabulator-modern-styles";
 import EditRowDialog from "./EditRowDialog";
 import { getDefaultRow, ProfileRow } from "./profile-table-types";
 
 const initData: ProfileRow[] = [];
-
-const createActionsFormatter = (handlers: {
-  onEdit: (rowData: ProfileRow) => void;
-  onGraph: (rowData: ProfileRow) => void;
-  onCopy: (rowData: ProfileRow) => void;
-  onDelete: (rowData: ProfileRow) => void;
-}) => {
-  return (cell: CellComponent) => {
-    const container = document.createElement("div");
-    const root = createRoot(container);
-
-    const row = cell.getRow();
-    const rowData = row.getData() as ProfileRow;
-
-    root.render(
-      <React.Fragment>
-        <Tooltip title={`Edit row for ${rowData.name}`} arrow placement="left">
-          <IconButton
-            onClick={() => handlers.onEdit(rowData)}
-            aria-label="edit"
-            size="small"
-            color="primary"
-          >
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
-        <IconButton
-          onClick={() => handlers.onGraph(rowData)}
-          aria-label="graph"
-          size="small"
-          color="secondary"
-          title={`Show graphs for ${rowData.name}`}
-        >
-          <InsightsIcon />
-        </IconButton>
-        <Tooltip
-          title={`Copy data URL for ${rowData.name}`}
-          arrow
-          placement="left"
-        >
-          <IconButton
-            onClick={() => handlers.onCopy(rowData)}
-            aria-label="copy data url"
-            size="small"
-          >
-            <ContentCopyIcon />
-          </IconButton>
-        </Tooltip>
-        <Tooltip
-          title={`Delete profile for ${rowData.name}`}
-          arrow
-          placement="left"
-        >
-          <IconButton
-            onClick={() => handlers.onDelete(rowData)}
-            aria-label="delete"
-            size="small"
-            color="error"
-          >
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      </React.Fragment>
-    );
-
-    return container;
-  };
-};
 
 export default function ProfilesTable() {
   const [data, setData] = useState<ProfileRow[]>(initData);
@@ -109,8 +39,6 @@ export default function ProfilesTable() {
   const [currentRow, setCurrentRow] = useState<ProfileRow | null>(null);
 
   const navigate = useNavigate();
-
-  const styles = useTabulatorModernStyles();
   const [searchParams] = useSearchParams();
 
   const getDataFromPersistentStore = async (): Promise<ProfileRow[] | null> => {
@@ -145,7 +73,7 @@ export default function ProfilesTable() {
                 }
               };
             } else {
-              confirmationMessage = `Profile does not currently exists for ${jsonData.name}, would you like to import?`;
+              confirmationMessage = `Profile does not currently exist for ${jsonData.name}, would you like to import?`;
               confirmationCallback = () => {
                 handleDataChanged([...(dataFromStore || []), jsonData]);
               };
@@ -235,38 +163,51 @@ export default function ProfilesTable() {
     if (currentRow?.newRow) handleDeleteRow(currentRow.id);
   };
 
-  const columns = [
+  const columns: GridColDef[] = [
+    { field: "name", headerName: "Name", flex: 1 },
     {
-      title: "Name",
-      field: "name",
+      field: "actions",
+      headerName: "Actions",
+      width: 200,
+      renderCell: (params) => (
+        <Box>
+          <Tooltip title="Edit">
+            <IconButton
+              onClick={() => handleRowEditClick(params.row as ProfileRow)}
+            >
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Graph">
+            <IconButton
+              onClick={() => handleRowGraphClick(params.row as ProfileRow)}
+            >
+              <InsightsIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Copy URL">
+            <IconButton
+              onClick={() => handleDataUrlToClipboard(params.row as ProfileRow)}
+            >
+              <ContentCopyIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Delete">
+            <IconButton
+              onClick={() => handleRowDeleteClick(params.row as ProfileRow)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      ),
     },
   ];
 
   return (
-    <div css={styles}>
-      <ReactTabulator
-        data={data}
-        options={{
-          movableColumns: true,
-          columns: [
-            ...columns,
-            {
-              title: "Actions",
-              field: "actions",
-              hozAlign: "center",
-              width: 150,
-              formatter: createActionsFormatter({
-                onEdit: handleRowEditClick,
-                onGraph: handleRowGraphClick,
-                onCopy: handleDataUrlToClipboard,
-                onDelete: handleRowDeleteClick,
-              }),
-            },
-          ],
-          theme: "Midnight",
-        }}
-      />
-      <Stack direction="row" spacing={2}>
+    <Box>
+      <DataGrid rows={data} columns={columns} />
+      <Stack direction="row" spacing={2} sx={{ marginTop: 2 }}>
         <Button
           onClick={() => {
             const newRow = getDefaultRow();
@@ -305,6 +246,6 @@ export default function ProfilesTable() {
         setCurrentRow={setCurrentRow}
         saveRow={handleRowSave}
       />
-    </div>
+    </Box>
   );
 }
