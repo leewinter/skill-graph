@@ -1,10 +1,12 @@
 import Autocomplete from "@mui/material/Autocomplete";
+import Box from "@mui/material/Box";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slider from "@mui/material/Slider";
 import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import Button from "@src/components/Button";
 
 import { TechnologyRow } from "./table-types";
@@ -53,20 +55,26 @@ export default function EditRowDialog({
           fullWidth
           style={{ marginBottom: "16px" }}
         />
-        <Slider
-          value={currentRow?.ability || 1}
-          onChange={(_e, newValue) =>
-            setCurrentRow((prev) =>
-              prev ? { ...prev, ability: newValue as number } : null
-            )
-          }
-          min={1}
-          max={10}
-          step={1}
-          marks
-          valueLabelDisplay="auto"
-          style={{ marginBottom: "16px" }}
-        />
+        <Box sx={{ margin: "0 auto", textAlign: "center" }}>
+          <Typography id="slider-description" variant="h6" gutterBottom>
+            Ability
+          </Typography>
+
+          <Slider
+            valueLabelDisplay="on"
+            value={currentRow?.ability || 1}
+            onChange={(_e, newValue) =>
+              setCurrentRow((prev) =>
+                prev ? { ...prev, ability: newValue as number } : null
+              )
+            }
+            min={1}
+            max={10}
+            step={1}
+            marks
+            style={{ marginBottom: "16px" }}
+          />
+        </Box>
         <Autocomplete
           fullWidth
           multiple
