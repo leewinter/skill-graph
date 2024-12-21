@@ -51,7 +51,7 @@ export default function RadarTechnology(props: { data: TechnologyRow[] }) {
             plugins: {
               title: {
                 display: true,
-                text: "Technology Ability Radar Chart",
+                text: "Technology Competency and Category Radar",
                 font: {
                   size: 18,
                   weight: "bold",
@@ -62,7 +62,7 @@ export default function RadarTechnology(props: { data: TechnologyRow[] }) {
                 },
               },
               legend: {
-                display: false,
+                display: true,
                 position: "top",
               },
             },
@@ -77,19 +77,29 @@ export default function RadarTechnology(props: { data: TechnologyRow[] }) {
           datasets: [
             {
               data: data.map((n) => n.ability),
-              label: "Technology",
+              label: "Ability",
               backgroundColor: hexToRgba(colors[0], 0.3),
               borderColor: hexToRgba(colors[1], 0.8),
               pointBackgroundColor: data.map((_, i) =>
                 hexToRgba(colors[i % colors.length], 0.8)
               ),
-              borderWidth: 1,
+              borderWidth: 0,
+            },
+            {
+              data: data.map((n) => n.category.length),
+              label: "Category Count",
+              backgroundColor: hexToRgba(colors[2], 0.3),
+              borderColor: hexToRgba(colors[3], 0.8),
+              pointBackgroundColor: data.map((_, i) =>
+                hexToRgba(colors[i % colors.length], 0.8)
+              ),
+              borderWidth: 0,
             },
           ],
         }}
         style={{
-          height: Math.min(dimensions.height * 0.6, 300), // Restrict height dynamically
-          maxHeight: 300,
+          height: Math.min(dimensions.height * 0.6, 500), // Restrict height dynamically
+          maxHeight: 500,
         }}
       />
     </Box>
