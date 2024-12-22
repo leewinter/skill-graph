@@ -7,14 +7,14 @@ export default function Layout() {
 
   const styles = css`
     a {
-      padding: ${theme.spacing(1.5)};
+      padding: ${theme.spacing(1)};
       color: ${theme.palette.text.primary};
       text-decoration: none;
       font-weight: 500;
       transition: color 0.3s ease;
 
       &.active {
-        color: ${theme.palette.secondary.main};
+        color: ${theme.palette.secondary.dark};
       }
 
       &:hover {
