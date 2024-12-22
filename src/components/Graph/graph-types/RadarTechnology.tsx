@@ -98,8 +98,8 @@ export default function RadarTechnology(props: { data: TechnologyRow[] }) {
           ],
         }}
         style={{
-          height: Math.min(dimensions.height * 0.6, 500), // Restrict height dynamically
-          maxHeight: 500,
+          height: Math.min(dimensions.height * 0.6, 300), // Restrict height dynamically
+          maxHeight: 300,
         }}
       />
     </Box>

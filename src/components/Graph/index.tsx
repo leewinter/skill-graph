@@ -110,21 +110,17 @@ export default function Graph() {
           </FormControl>
         </Grid>
 
-        <Grid size={{ xs: 12, md: 8 }} container spacing={2}>
-          <Grid size={{ xs: 12 }}>
-            <Card
-              sx={{ display: "flex", flexDirection: "column", height: "100%" }}
-            >
+        <Grid size={{ xs: 12 }} container spacing={2}>
+          <Grid size={{ xs: 12, md: 8 }}>
+            <Card>
               <CardContent>
                 <BarTechnology data={datasetsFilteredByCategory} />
               </CardContent>
             </Card>
           </Grid>
 
-          <Grid size={{ xs: 12 }}>
-            <Card
-              sx={{ display: "flex", flexDirection: "column", height: "100%" }}
-            >
+          <Grid size={{ xs: 12, md: 4 }}>
+            <Card>
               <CardContent>
                 <RadarTechnology data={datasetsFilteredByCategory} />
               </CardContent>
@@ -132,21 +128,17 @@ export default function Graph() {
           </Grid>
         </Grid>
 
-        <Grid size={{ xs: 12, md: 4 }} container spacing={2}>
-          <Grid size={{ xs: 12 }}>
-            <Card
-              sx={{ display: "flex", flexDirection: "column", height: "100%" }}
-            >
+        <Grid size={{ xs: 12 }} container spacing={2}>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <Card>
               <CardContent>
                 <PieTechnology data={datasetsFilteredByCategory} />
               </CardContent>
             </Card>
           </Grid>
 
-          <Grid size={{ xs: 12 }}>
-            <Card
-              sx={{ display: "flex", flexDirection: "column", height: "100%" }}
-            >
+          <Grid size={{ xs: 12, md: 8 }}>
+            <Card>
               <CardContent>
                 <PolarCategories data={datasetsFilteredByCategory} />
               </CardContent>
