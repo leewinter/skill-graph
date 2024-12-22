@@ -119,8 +119,9 @@ export default function TechnologyTable({
       field: "category",
       headerName: "Category",
       flex: 1,
-      valueGetter: (params) =>
-        Array.isArray(params.value) ? params.value.join(", ") : "",
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      valueGetter: (params: any) =>
+        Array.isArray(params.value) ? params.row.category.join(", ") : "",
     },
     {
       field: "actions",
