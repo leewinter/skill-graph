@@ -7,7 +7,7 @@ export default function Layout() {
 
   const styles = css`
     a {
-      padding: ${theme.spacing(1)};
+      padding: ${theme.spacing(0.8)};
       color: ${theme.palette.text.primary};
       text-decoration: none;
       font-weight: 500;
