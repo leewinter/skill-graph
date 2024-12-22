@@ -68,7 +68,7 @@ export default function TechnologyTable({
     if (!technologyAlreadyExists) {
       const updatedData = data.map((row) => {
         if (row.id === currentRow.id) {
-          return { ...currentRow, category: selectedCategories };
+          return { ...currentRow, category: selectedCategories, newRow: false };
         }
         return row;
       });
