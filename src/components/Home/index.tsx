@@ -9,7 +9,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   const handleGetStarted = () => {
-    navigate("/table");
+    navigate("/profiles");
   };
 
   return (
