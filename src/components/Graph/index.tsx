@@ -1,3 +1,4 @@
+import FilterListIcon from "@mui/icons-material/FilterList";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -7,7 +8,7 @@ import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import Grid from "@mui/material/Grid2";
-import Typography from "@mui/material/Typography";
+import IconButton from "@mui/material/IconButton";
 import { ProfileRow } from "@src/components/Profiles/profile-table-types";
 import { TechnologyRow } from "@src/components/TechnologyTable/table-types";
 import { PROFILES_DATA_KEY } from "@src/constants";
@@ -32,6 +33,7 @@ type CategoryCheckbox = {
 export default function Graph() {
   const [data, setData] = useState<TechnologyRow[]>([]);
   const [categories, setCategories] = useState<CategoryCheckbox[]>([]);
+  const [filterVisible, setFilterVisible] = useState(true); // State to manage filter visibility
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const profileId = queryParams.get("profile-id");
@@ -84,69 +86,68 @@ export default function Graph() {
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2}>
         <Grid size={12}>
-          <Typography variant="h6" gutterBottom>
-            Category Filter
-          </Typography>
-          <Divider />
-          <FormControl fullWidth>
-            <FormGroup style={{ flexDirection: "row" }}>
-              {categories
-                .sort((a, b) => a.category.localeCompare(b.category))
-                .map((cat, index) => {
-                  return (
-                    <FormControlLabel
-                      key={index}
-                      control={
-                        <Checkbox
-                          checked={cat.checked}
-                          onClick={() => handleCheckboxChecked(cat)}
-                        />
-                      }
-                      label={cat.category}
-                    />
-                  );
-                })}
-            </FormGroup>
-          </FormControl>
-        </Grid>
-
-        <Grid size={{ xs: 12, md: 8 }} container spacing={2}>
-          <Grid size={{ xs: 12 }}>
-            <Card
-              sx={{ display: "flex", flexDirection: "column", height: "100%" }}
+          <Box sx={{ display: "flex", alignItems: "center", marginBottom: 2 }}>
+            <IconButton
+              onClick={() => setFilterVisible(!filterVisible)}
+              color={filterVisible ? "primary" : "default"} // Highlight when active
             >
+              <FilterListIcon />
+            </IconButton>
+          </Box>
+        </Grid>
+        {filterVisible && (
+          <Grid size={12}>
+            <Divider />
+            <FormControl fullWidth>
+              <FormGroup style={{ flexDirection: "row" }}>
+                {categories
+                  .sort((a, b) => a.category.localeCompare(b.category))
+                  .map((cat, index) => {
+                    return (
+                      <FormControlLabel
+                        key={index}
+                        control={
+                          <Checkbox
+                            checked={cat.checked}
+                            onClick={() => handleCheckboxChecked(cat)}
+                          />
+                        }
+                        label={cat.category}
+                      />
+                    );
+                  })}
+              </FormGroup>
+            </FormControl>
+          </Grid>
+        )}
+        <Grid size={{ xs: 12 }} container spacing={2}>
+          <Grid size={{ xs: 12, md: 8 }}>
+            <Card>
               <CardContent>
                 <BarTechnology data={datasetsFilteredByCategory} />
               </CardContent>
             </Card>
           </Grid>
 
-          <Grid size={{ xs: 12 }}>
-            <Card
-              sx={{ display: "flex", flexDirection: "column", height: "100%" }}
-            >
+          <Grid size={{ xs: 12, md: 4 }}>
+            <Card>
               <CardContent>
                 <RadarTechnology data={datasetsFilteredByCategory} />
               </CardContent>
             </Card>
           </Grid>
         </Grid>
-
-        <Grid size={{ xs: 12, md: 4 }} container spacing={2}>
-          <Grid size={{ xs: 12 }}>
-            <Card
-              sx={{ display: "flex", flexDirection: "column", height: "100%" }}
-            >
+        <Grid size={{ xs: 12 }} container spacing={2}>
+          <Grid size={{ xs: 12, md: 4 }}>
+            <Card>
               <CardContent>
                 <PieTechnology data={datasetsFilteredByCategory} />
               </CardContent>
             </Card>
           </Grid>
 
-          <Grid size={{ xs: 12 }}>
-            <Card
-              sx={{ display: "flex", flexDirection: "column", height: "100%" }}
-            >
+          <Grid size={{ xs: 12, md: 8 }}>
+            <Card>
               <CardContent>
                 <PolarCategories data={datasetsFilteredByCategory} />
               </CardContent>

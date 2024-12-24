@@ -78,7 +78,7 @@ export default function RadarTechnology(props: { data: TechnologyRow[] }) {
             {
               data: data.map((n) => n.ability),
               label: "Ability",
-              backgroundColor: hexToRgba(colors[0], 0.3),
+              backgroundColor: hexToRgba(colors[0], 0.6),
               borderColor: hexToRgba(colors[1], 0.8),
               pointBackgroundColor: data.map((_, i) =>
                 hexToRgba(colors[i % colors.length], 0.8)
@@ -88,18 +88,18 @@ export default function RadarTechnology(props: { data: TechnologyRow[] }) {
             {
               data: data.map((n) => n.category.length),
               label: "Category Count",
-              backgroundColor: hexToRgba(colors[2], 0.3),
+              backgroundColor: hexToRgba(colors[2], 0.6),
               borderColor: hexToRgba(colors[3], 0.8),
               pointBackgroundColor: data.map((_, i) =>
-                hexToRgba(colors[i % colors.length], 0.8)
+                hexToRgba(colors[i % colors.length], 0.9)
               ),
               borderWidth: 0,
             },
           ],
         }}
         style={{
-          height: Math.min(dimensions.height * 0.6, 500), // Restrict height dynamically
-          maxHeight: 500,
+          height: Math.min(dimensions.height * 0.6, 300), // Restrict height dynamically
+          maxHeight: 300,
         }}
       />
     </Box>

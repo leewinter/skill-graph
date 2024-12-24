@@ -61,15 +61,15 @@ export default function BarTechnology(props: { data: TechnologyRow[] }) {
                 (_, i) =>
                   hexToRgba(
                     d3.schemeCategory10[i % d3.schemeCategory10.length],
-                    0.6
+                    0.9
                   ) // Add transparency
               ),
             },
           ],
         }}
         style={{
-          height: Math.min(dimensions.height * 0.6, 500), // Restrict height dynamically
-          maxHeight: 500,
+          height: Math.min(dimensions.height * 0.6, 300), // Restrict height dynamically
+          maxHeight: 300,
         }}
       />
     </Box>
