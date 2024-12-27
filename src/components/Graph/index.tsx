@@ -21,6 +21,7 @@ import BarTechnology from "./graph-types/BarTechnology";
 import PieTechnology from "./graph-types/PieTechnology";
 import PolarCategories from "./graph-types/PolarCategories";
 import RadarTechnology from "./graph-types/RadarTechnology";
+import SankeyTechnology from "./graph-types/SankeyCategoryTechnology";
 import { extractUniqueCatgories } from "./graphHelpers";
 
 Chart.register(...registerables);
@@ -150,6 +151,15 @@ export default function Graph() {
             <Card>
               <CardContent>
                 <PolarCategories data={datasetsFilteredByCategory} />
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+        <Grid size={{ xs: 12 }} container spacing={2}>
+          <Grid size={{ xs: 12 }}>
+            <Card>
+              <CardContent>
+                <SankeyTechnology data={datasetsFilteredByCategory} />
               </CardContent>
             </Card>
           </Grid>
