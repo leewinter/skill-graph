@@ -8,6 +8,12 @@ import { Chart } from "react-chartjs-2";
 
 import { hexToRgba } from "../graphHelpers";
 
+interface SankeyDataPoint {
+  from: string;
+  to: string;
+  flow: number;
+}
+
 // Register required Chart.js components
 ChartJs.register(...registerables, SankeyController, Flow);
 
@@ -17,7 +23,7 @@ export default function SankeyTechnology(props: { data: TechnologyRow[] }) {
   const { dimensions } = useWindowResize();
 
   // Transform the data into a Sankey-compatible format
-  const links = data.flatMap((row) =>
+  const links: SankeyDataPoint[] = data.flatMap((row) =>
     row.category.map((category) => ({
       from: category, // Each category becomes a source
       to: row.technology, // Technology becomes the target
@@ -58,11 +64,13 @@ export default function SankeyTechnology(props: { data: TechnologyRow[] }) {
               callbacks: {
                 title: (tooltipItems) =>
                   tooltipItems.length > 0
-                    ? `From: ${tooltipItems[0].raw?.from} → To: ${tooltipItems[0].raw?.to}`
+                    ? `From: ${
+                        (tooltipItems[0].raw as SankeyDataPoint).from
+                      } → To: ${(tooltipItems[0].raw as SankeyDataPoint).to}`
                     : "",
                 label: (tooltipItem) =>
                   `Value: ${
-                    tooltipItem.raw?.flow ? tooltipItem.raw.flow.toFixed(2) : 0
+                    (tooltipItem.raw as SankeyDataPoint)?.flow.toFixed(2) || 0
                   }`,
               },
             },
@@ -88,8 +96,14 @@ export default function SankeyTechnology(props: { data: TechnologyRow[] }) {
             {
               label: "Category to Technology Flow",
               data: links,
-              colorFrom: (ctx) => (ctx.raw?.from ? "#ff6384" : "#36a2eb"), // Default category color
-              colorTo: (ctx) => technologyColors[ctx.raw?.to] || "#ffcd56", // Use mapped technology colors
+              colorFrom: (ctx) =>
+                ctx.raw && (ctx.raw as SankeyDataPoint).from
+                  ? "#ff6384"
+                  : "#36a2eb", // Default category color
+              colorTo: (ctx) =>
+                ctx.raw && (ctx.raw as SankeyDataPoint).to
+                  ? technologyColors[(ctx.raw as SankeyDataPoint).to]
+                  : "#ffcd56", // Use mapped technology colors
               borderWidth: 0,
             },
           ],
