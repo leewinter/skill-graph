@@ -16,16 +16,12 @@ export default function EditRowDialog({
   onClose,
   currentRow,
   setCurrentRow,
-  selectedCategories,
-  setSelectedCategories,
   saveRow,
 }: {
   open: boolean;
   onClose: () => void;
   currentRow: TechnologyRow | null;
   setCurrentRow: React.Dispatch<React.SetStateAction<TechnologyRow | null>>;
-  selectedCategories: string[];
-  setSelectedCategories: React.Dispatch<React.SetStateAction<string[]>>;
   saveRow: () => void;
 }) {
   return (
@@ -79,8 +75,12 @@ export default function EditRowDialog({
           fullWidth
           multiple
           options={["Infrastructure", "UI", "Cloud", "Backend", "Data"]}
-          value={selectedCategories}
-          onChange={(_event, newValue) => setSelectedCategories(newValue)}
+          value={currentRow?.category || []} // Default to an empty array
+          onChange={(_event, newValue) => {
+            setCurrentRow((prev) =>
+              prev ? { ...prev, category: newValue } : null
+            );
+          }}
           renderInput={(params) => (
             <TextField
               {...params}
