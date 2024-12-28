@@ -30,7 +30,6 @@ export default function TechnologyTable({
     defaultConfirmCallback
   );
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [currentRow, setCurrentRow] = useState<TechnologyRow | null>(null);
 
   // Snackbar state
@@ -53,7 +52,6 @@ export default function TechnologyTable({
 
   const handleRowClick = (rowData: TechnologyRow) => {
     setCurrentRow(rowData);
-    setSelectedCategories(rowData.category || []);
     setDialogOpen(true);
   };
 
@@ -68,7 +66,7 @@ export default function TechnologyTable({
     if (!technologyAlreadyExists) {
       const updatedData = data.map((row) => {
         if (row.id === currentRow.id) {
-          return { ...currentRow, category: selectedCategories, newRow: false };
+          return { ...currentRow, newRow: false };
         }
         return row;
       });
@@ -119,9 +117,11 @@ export default function TechnologyTable({
       field: "category",
       headerName: "Category",
       flex: 1,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      valueGetter: (params: any) =>
-        Array.isArray(params.value) ? params.row.category.join(", ") : "",
+      renderCell: (params) => (
+        <span>
+          {Array.isArray(params.value) ? params.value.join(", ") : ""}
+        </span>
+      ),
     },
     {
       field: "actions",
@@ -190,8 +190,6 @@ export default function TechnologyTable({
         onClose={handleEditClose}
         currentRow={currentRow}
         setCurrentRow={setCurrentRow}
-        selectedCategories={selectedCategories}
-        setSelectedCategories={setSelectedCategories}
         saveRow={saveRow}
       />
     </Box>
