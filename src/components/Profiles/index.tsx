@@ -206,7 +206,14 @@ export default function ProfilesTable() {
 
   return (
     <Box>
-      <DataGrid rows={data} columns={columns} />
+      <DataGrid
+        rows={data}
+        columns={columns}
+        pageSizeOptions={[5, 10, 25]}
+        initialState={{
+          pagination: { paginationModel: { pageSize: 5 } },
+        }}
+      />
       <Stack direction="row" spacing={2} sx={{ marginTop: 2 }}>
         <Button
           onClick={() => {
