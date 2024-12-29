@@ -61,7 +61,7 @@ export default function PieTechnology(props: { data: TechnologyRow[] }) {
           datasets: [
             {
               data: data.map((n) => n.ability),
-              label: "Technology",
+              label: "Ability",
               backgroundColor: data.map(
                 (_, i) =>
                   hexToRgba(

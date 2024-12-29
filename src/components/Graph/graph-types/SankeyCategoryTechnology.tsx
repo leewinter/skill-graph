@@ -69,7 +69,7 @@ export default function SankeyTechnology(props: { data: TechnologyRow[] }) {
                       } → To: ${(tooltipItems[0].raw as SankeyDataPoint).to}`
                     : "",
                 label: (tooltipItem) =>
-                  `Value: ${
+                  `Ability Split: ${
                     (tooltipItem.raw as SankeyDataPoint)?.flow.toFixed(2) || 0
                   }`,
               },
