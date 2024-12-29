@@ -76,10 +76,7 @@ export default function PolarCategories(props: { data: TechnologyRow[] }) {
               label: "Category Frequency",
               backgroundColor: labels.map(
                 (_, i) =>
-                  hexToRgba(
-                    d3.schemeCategory10[i % d3.schemeCategory10.length],
-                    0.6
-                  ) // Add transparency
+                  hexToRgba(d3.schemeAccent[i % d3.schemeAccent.length], 0.6) // Add transparency
               ),
               borderWidth: 0,
             },

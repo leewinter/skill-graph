@@ -6,6 +6,7 @@ import { Flow, SankeyController } from "chartjs-chart-sankey";
 import * as d3 from "d3-scale-chromatic";
 import { Chart } from "react-chartjs-2";
 
+import { extractUniqueCatgories } from "../graphHelpers";
 import { hexToRgba } from "../graphHelpers";
 
 interface SankeyDataPoint {
@@ -36,6 +37,14 @@ export default function SankeyTechnology(props: { data: TechnologyRow[] }) {
     Array.from(new Set(data.map((row) => row.technology))).map((tech, i) => [
       tech,
       hexToRgba(d3.schemeCategory10[i % d3.schemeCategory10.length], 0.9),
+    ])
+  );
+
+  const uniqueCategories = extractUniqueCatgories(data);
+  const categoryColors = Object.fromEntries(
+    uniqueCategories.map((cat, i) => [
+      cat,
+      hexToRgba(d3.schemeAccent[i % d3.schemeAccent.length], 0.9),
     ])
   );
 
@@ -98,12 +107,12 @@ export default function SankeyTechnology(props: { data: TechnologyRow[] }) {
               data: links,
               colorFrom: (ctx) =>
                 ctx.raw && (ctx.raw as SankeyDataPoint).from
-                  ? "#ff6384"
+                  ? categoryColors[(ctx.raw as SankeyDataPoint).from]
                   : "#36a2eb", // Default category color
               colorTo: (ctx) =>
                 ctx.raw && (ctx.raw as SankeyDataPoint).to
                   ? technologyColors[(ctx.raw as SankeyDataPoint).to]
-                  : "#ffcd56", // Use mapped technology colors
+                  : "#ffcd56",
               borderWidth: 0,
             },
           ],
