@@ -57,6 +57,7 @@ export default function BarTechnology(props: { data: TechnologyRow[] }) {
           datasets: [
             {
               data: data.map((n) => n.ability),
+              label: "Ability",
               backgroundColor: data.map(
                 (_, i) =>
                   hexToRgba(

@@ -16,8 +16,8 @@ export default function RadarTechnology(props: { data: TechnologyRow[] }) {
 
   const { dimensions } = useWindowResize();
 
-  // Generate a distinct color palette using d3
-  const colors = d3.schemeCategory10; // This palette has 10 visually distinct colors
+  const technologyColours = d3.schemeCategory10;
+  const categoryColours = d3.schemeAccent;
 
   return (
     <Box
@@ -78,20 +78,20 @@ export default function RadarTechnology(props: { data: TechnologyRow[] }) {
             {
               data: data.map((n) => n.ability),
               label: "Ability",
-              backgroundColor: hexToRgba(colors[0], 0.6),
-              borderColor: hexToRgba(colors[1], 0.8),
+              backgroundColor: hexToRgba(technologyColours[0], 0.6),
+              borderColor: hexToRgba(technologyColours[1], 0.8),
               pointBackgroundColor: data.map((_, i) =>
-                hexToRgba(colors[i % colors.length], 0.8)
+                hexToRgba(technologyColours[i % technologyColours.length], 0.8)
               ),
               borderWidth: 0,
             },
             {
               data: data.map((n) => n.category.length),
               label: "Category Count",
-              backgroundColor: hexToRgba(colors[2], 0.6),
-              borderColor: hexToRgba(colors[3], 0.8),
+              backgroundColor: hexToRgba(categoryColours[2], 0.6),
+              borderColor: hexToRgba(categoryColours[3], 0.8),
               pointBackgroundColor: data.map((_, i) =>
-                hexToRgba(colors[i % colors.length], 0.9)
+                hexToRgba(categoryColours[i % categoryColours.length], 0.9)
               ),
               borderWidth: 0,
             },
