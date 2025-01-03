@@ -243,7 +243,7 @@ export default function ProfilesTable() {
         keepMounted
         onClose={() => setDataUrlOpen(null)}
         open={Boolean(dataUrlOpen)}
-        message="Url copied to the clipboard"
+        message="Share your profile"
         url={dataUrlOpen}
       />
       <EditRowDialog
