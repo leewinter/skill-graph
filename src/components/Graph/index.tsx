@@ -34,7 +34,7 @@ type CategoryCheckbox = {
 export default function Graph() {
   const [data, setData] = useState<TechnologyRow[]>([]);
   const [categories, setCategories] = useState<CategoryCheckbox[]>([]);
-  const [filterVisible, setFilterVisible] = useState(true); // State to manage filter visibility
+  const [filterVisible, setFilterVisible] = useState(false); // State to manage filter visibility
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const profileId = queryParams.get("profile-id");
