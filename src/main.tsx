@@ -1,11 +1,19 @@
-import { css, Global, ThemeProvider } from "@emotion/react";
+import { Global, ThemeProvider, css } from "@emotion/react";
+
+import App from "@src/App.tsx";
 import { CssBaseline } from "@mui/material";
+import { HashRouter } from "react-router-dom";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { HashRouter } from "react-router-dom";
+import en from "@src/locales/en.json";
+import es from "@src/locales/es.json"
+import { initI18n } from "@src/utils/i18n.ts"
+import theme from "@src/theme";
 
-import App from "./App.tsx";
-import theme from "./theme";
+initI18n({
+  en,
+  es,
+});
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

@@ -1,0 +1,131 @@
+{
+  "translation": {
+    "shared": {
+      "loading": "Loading...",
+      "cancel": "Cancel",
+      "save": "Save",
+      "add": "Add",
+      "remove": "Remove",
+      "yes": "Yes",
+      "no": "No",
+      "close": "Close",
+      "delete": "Delete",
+      "update": "Update",
+      "ok": "Ok",
+      "categories": {
+      "Infrastructure": "Infrastructure",
+      "UI": "UI",
+      "Cloud": "Cloud",
+      "Backend": "Backend",
+      "Data": "Data"
+    }
+    },
+    "home": {
+      "title": "Skill Graph",
+      "p1": "Welcome to Skill Graph! This simple tool allows you to create and manage a list of skills, each with an associated ability score.",
+      "p2": "All your data is securely stored locally on your device, ensuring privacy and easy access.",
+      "caption1": "The data is saved using IndexedDB, Web SQL, or local storage depending on your browser compatibility.",
+      "getStartedBtn": "Get Started"
+    },
+    "dataExportDialog": {
+      "p1": "Your data URL has automatically been copied to the clipboard. You can share your profile by sending the below URL to someone.",
+      "qrP1": "Scan the QR code below to access the link:",
+      "info1": "Please note that any changes made by the person opening the link will only apply to their own view, and will not affect your profile. Likewise, any changes you make will not be reflected in the shared link.",
+      "urlLabel": "Shareable URL"
+    },
+    "layout":{
+      "home": "Home",
+      "profiles": "Profiles"
+    },
+    "notFound":{
+      "title": "Nothing to see here!",
+      "link": "Go to the home page"
+    },
+    "profiles": {
+      "editRowDialog": {
+        "title": "Edit Row",
+        "nameInputLabel": "Name"
+      },
+      "confirmationMessage": {
+        "profileAlreadyExists": "Profile already exists for {{name}}, would you like to update?",
+        "profileIsNew": "Profile does not currently exist for {{name}}, would you like to import?",
+        "deleteRow": "Remove this row?"
+      },
+      "profileGrid": {
+        "columns": {
+          "name": "Name",
+          "actions": "Actions"
+        },
+        "actions": {
+          "edit": "Edit",
+          "charts": "Charts",
+          "copy": "Copy URL",
+          "delete": "Delete"
+        }
+      },
+      "addRowBtnLabel": "Add Row",
+      "shareProfileTitle": "Share your profile"
+    },
+    "technologyTable": {
+      "editRowDialog": {
+        "title": "Edit Row",
+        "technologyInputLabel": "Technology",
+        "abilitySliderLabel": "Ability",
+        "categoriesInputLabel": "Categories"
+      },
+      "notifications": {
+        "duplicateTech": "Duplicate technology detected!"
+      },
+      "confirmationMessage": {
+        "deleteRow": "Remove this row?"
+      },
+      "technologyGrid": {
+        "columns": {
+          "technology": "Technology",
+          "ability": "Ability",
+          "category": "Category",
+          "actions": "Actions"
+        },
+        "actions": {
+          "edit": "Edit",
+          "delete": "Delete"
+        }
+      },
+      "addRowBtnLabel": "Add Row"
+    },
+    "charts":{
+      "barTechnology": {
+        "title": "Technology Ability Chart",
+        "datasets": {
+          "abilityLabel": "Ability"
+        }
+      },
+      "pieTechnology": {
+        "title": "Technology Distribution",
+        "datasets": {
+          "abilityLabel": "Ability"
+        }
+      },
+      "polarCategories": {
+        "title": "Category Frequency Distribution",
+        "datasets": {
+          "categoryFrequencyLabel": "Category Frequency"
+        }
+      },
+      "radarTechnology": {
+        "title": "Technology Competency and Category Radar",
+        "datasets": {
+          "abilityLabel": "Ability",
+          "categoryCountLabel": "Category Count"
+        }
+      },
+      "sankeyTechnology": {
+        "title": "Sankey Chart: Categories to Technologies",
+        "datasets": {
+          "categoryToTechLabel": "Category to Technology Flow"
+        }
+      }
+    }
+    
+  }
+}

@@ -1,15 +1,20 @@
-import Box from "@mui/material/Box";
-import { TechnologyRow } from "@src/components/TechnologyTable/table-types";
-import { useWindowResize } from "@src/hooks/useWindowResize";
 import * as d3 from "d3-scale-chromatic";
-import { Pie } from "react-chartjs-2";
 
+import Box from "@mui/material/Box";
+import { Pie } from "react-chartjs-2";
+import { TechnologyRow } from "@src/components/TechnologyTable/table-types";
 import { hexToRgba } from "../graphHelpers";
+import { useTranslation } from "react-i18next";
+import { useWindowResize } from "@src/hooks/useWindowResize";
 
 export default function PieTechnology(props: { data: TechnologyRow[] }) {
   const { data } = props;
 
   const { dimensions } = useWindowResize();
+
+  const { t, ready } = useTranslation();
+
+  if (!ready) return <div>{t("shared.loading")}</div>;
 
   return (
     <Box
@@ -32,7 +37,7 @@ export default function PieTechnology(props: { data: TechnologyRow[] }) {
           plugins: {
             title: {
               display: true,
-              text: "Technology Distribution",
+              text: t("charts.pieTechnology.title"),
               font: {
                 size: 18,
                 weight: "bold",
@@ -61,7 +66,7 @@ export default function PieTechnology(props: { data: TechnologyRow[] }) {
           datasets: [
             {
               data: data.map((n) => n.ability),
-              label: "Ability",
+              label: t("charts.pieTechnology.datasets.abilityLabel"),
               backgroundColor: data.map(
                 (_, i) =>
                   hexToRgba(

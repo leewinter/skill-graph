@@ -1,0 +1,130 @@
+{
+  "translation": {
+    "shared": {
+      "loading": "Cargando...",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "add": "Agregar",
+      "remove": "Eliminar",
+      "yes": "Sí",
+      "no": "No",
+      "close": "Cerrar",
+      "delete": "Eliminar",
+      "update": "Actualizar",
+      "ok": "Aceptar",
+      "categories": {
+        "Infrastructure": "Infraestructura",
+        "UI": "Interfaz de Usuario",
+        "Cloud": "Nube",
+        "Backend": "Backend",
+        "Data": "Datos"
+      }
+    },
+    "home": {
+      "title": "Gráfico de Habilidades",
+      "p1": "¡Bienvenido a Gráfico de Habilidades! Esta sencilla herramienta te permite crear y gestionar una lista de habilidades, cada una con una puntuación de capacidad asociada.",
+      "p2": "Todos tus datos se almacenan de forma segura localmente en tu dispositivo, garantizando privacidad y fácil acceso.",
+      "caption1": "Los datos se guardan utilizando IndexedDB, Web SQL o almacenamiento local dependiendo de la compatibilidad de tu navegador.",
+      "getStartedBtn": "Comenzar"
+    },
+    "dataExportDialog": {
+      "p1": "La URL de tus datos se ha copiado automáticamente al portapapeles. Puedes compartir tu perfil enviando la siguiente URL a alguien.",
+      "qrP1": "Escanea el código QR a continuación para acceder al enlace:",
+      "info1": "Ten en cuenta que cualquier cambio realizado por la persona que abra el enlace solo se aplicará a su propia vista y no afectará tu perfil. De la misma manera, cualquier cambio que realices no se reflejará en el enlace compartido.",
+      "urlLabel": "URL para compartir"
+    },
+    "layout": {
+      "home": "Inicio",
+      "profiles": "Perfiles"
+    },
+    "notFound": {
+      "title": "¡Nada que ver aquí!",
+      "link": "Ir a la página de inicio"
+    },
+    "profiles": {
+      "editRowDialog": {
+        "title": "Editar Fila",
+        "nameInputLabel": "Nombre"
+      },
+      "confirmationMessage": {
+        "profileAlreadyExists": "Ya existe un perfil para {{name}}, ¿te gustaría actualizarlo?",
+        "profileIsNew": "No existe un perfil actualmente para {{name}}, ¿te gustaría importarlo?",
+        "deleteRow": "¿Eliminar esta fila?"
+      },
+      "profileGrid": {
+        "columns": {
+          "name": "Nombre",
+          "actions": "Acciones"
+        },
+        "actions": {
+          "edit": "Editar",
+          "charts": "Gráficos",
+          "copy": "Copiar URL",
+          "delete": "Eliminar"
+        }
+      },
+      "addRowBtnLabel": "Agregar Fila",
+      "shareProfileTitle": "Comparte tu perfil"
+    },
+    "technologyTable": {
+      "editRowDialog": {
+        "title": "Editar Fila",
+        "technologyInputLabel": "Tecnología",
+        "abilitySliderLabel": "Capacidad",
+        "categoriesInputLabel": "Categorías"
+      },
+      "notifications": {
+        "duplicateTech": "¡Tecnología duplicada detectada!"
+      },
+      "confirmationMessage": {
+        "deleteRow": "¿Eliminar esta fila?"
+      },
+      "technologyGrid": {
+        "columns": {
+          "technology": "Tecnología",
+          "ability": "Capacidad",
+          "category": "Categoría",
+          "actions": "Acciones"
+        },
+        "actions": {
+          "edit": "Editar",
+          "delete": "Eliminar"
+        }
+      },
+      "addRowBtnLabel": "Agregar Fila"
+    },
+    "charts": {
+      "barTechnology": {
+        "title": "Gráfico de Capacidad por Tecnología",
+        "datasets": {
+          "abilityLabel": "Capacidad"
+        }
+      },
+      "pieTechnology": {
+        "title": "Distribución de Tecnologías",
+        "datasets": {
+          "abilityLabel": "Capacidad"
+        }
+      },
+      "polarCategories": {
+        "title": "Distribución de Frecuencia por Categorías",
+        "datasets": {
+          "categoryFrequencyLabel": "Frecuencia por Categoría"
+        }
+      },
+      "radarTechnology": {
+        "title": "Radar de Competencia y Categorías por Tecnología",
+        "datasets": {
+          "abilityLabel": "Capacidad",
+          "categoryCountLabel": "Recuento por Categoría"
+        }
+      },
+      "sankeyTechnology": {
+        "title": "Gráfico Sankey: Categorías a Tecnologías",
+        "datasets": {
+          "categoryToTechLabel": "Flujo de Categoría a Tecnología"
+        }
+      }
+    }
+  }
+}

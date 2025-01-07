@@ -1,15 +1,16 @@
 import Autocomplete from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
+import Button from "@src/components/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slider from "@mui/material/Slider";
+import { TechnologyRow } from "./table-types";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import Button from "@src/components/Button";
-
-import { TechnologyRow } from "./table-types";
+import { useAvailableCategories } from "@src/hooks/useAvailableCategories";
+import { useTranslation } from "react-i18next";
 
 export default function EditRowDialog({
   open,
@@ -24,6 +25,12 @@ export default function EditRowDialog({
   setCurrentRow: React.Dispatch<React.SetStateAction<TechnologyRow | null>>;
   saveRow: () => void;
 }) {
+  const { t, ready } = useTranslation();
+
+  const categories = useAvailableCategories();
+
+  if (!ready) return <div>{t("shared.loading")}</div>;
+  
   return (
     <Dialog
       open={open}
@@ -37,10 +44,10 @@ export default function EditRowDialog({
         },
       }}
     >
-      <DialogTitle>Edit Row</DialogTitle>
+      <DialogTitle>{t("technologyTable.editRowDialog.title")}</DialogTitle>
       <DialogContent dividers>
         <TextField
-          label="Technology"
+          label={t("technologyTable.editRowDialog.technologyInputLabel")}
           value={currentRow?.technology || ""}
           onChange={(e) => {
             setCurrentRow((prev) =>
@@ -53,7 +60,7 @@ export default function EditRowDialog({
         />
         <Box sx={{ margin: "0 auto", textAlign: "center" }}>
           <Typography id="slider-description" variant="h6" gutterBottom>
-            Ability
+            {t("technologyTable.editRowDialog.abilitySliderLabel")}
           </Typography>
 
           <Slider
@@ -74,17 +81,21 @@ export default function EditRowDialog({
         <Autocomplete
           fullWidth
           multiple
-          options={["Infrastructure", "UI", "Cloud", "Backend", "Data"]}
-          value={currentRow?.category || []} // Default to an empty array
+          options={categories}
+          value={categories.filter((option) =>
+            (currentRow?.category || []).includes(option.value)
+          )}
           onChange={(_event, newValue) => {
             setCurrentRow((prev) =>
-              prev ? { ...prev, category: newValue } : null
+              prev ? { ...prev, category: newValue.map((option) => option.value) } : null
             );
           }}
+          getOptionLabel={(option) => option.label}
+          isOptionEqualToValue={(option, value) => option.value === value.value}
           renderInput={(params) => (
             <TextField
               {...params}
-              label="Categories"
+              label={t("technologyTable.editRowDialog.categoriesInputLabel")}
               variant="outlined"
               fullWidth
             />
@@ -92,8 +103,8 @@ export default function EditRowDialog({
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} text="Cancel" />
-        <Button onClick={saveRow} text="Update" />
+        <Button onClick={onClose} text={t("shared.cancel")} />
+        <Button onClick={saveRow} text={t("shared.update")} />
       </DialogActions>
     </Dialog>
   );

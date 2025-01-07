@@ -1,22 +1,24 @@
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+import {
+  ConfirmDialog,
+  ConfirmationCallback,
+  defaultConfirmCallback,
+} from "@src/components/ConfirmDialog";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { TechnologyRow, getDefaultRow } from "./table-types";
+
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
+import Button from "@src/components/Button";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import EditRowDialog from "./EditRowDialog";
 import IconButton from "@mui/material/IconButton";
 import Snackbar from "@mui/material/Snackbar";
 import Stack from "@mui/material/Stack";
 import Tooltip from "@mui/material/Tooltip";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import Button from "@src/components/Button";
-import {
-  ConfirmationCallback,
-  ConfirmDialog,
-  defaultConfirmCallback,
-} from "@src/components/ConfirmDialog";
+import { useAvailableCategories } from "@src/hooks/useAvailableCategories";
 import { useState } from "react";
-
-import EditRowDialog from "./EditRowDialog";
-import { getDefaultRow, TechnologyRow } from "./table-types";
+import { useTranslation } from "react-i18next";
 
 export default function TechnologyTable({
   initData,
@@ -35,6 +37,12 @@ export default function TechnologyTable({
   // Snackbar state
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+
+  const categories = useAvailableCategories();
+
+  const { t, ready } = useTranslation();
+
+  if (!ready) return <div>{t("shared.loading")}</div>;
 
   const handleDataChanged = (updatedData: TechnologyRow[]) => {
     const uniqueCategories = updatedData.map((item) => ({
@@ -74,7 +82,7 @@ export default function TechnologyTable({
       setDialogOpen(false);
     } else {
       // Show Snackbar if duplicate
-      setSnackbarMessage("Duplicate technology detected!");
+      setSnackbarMessage(t("technologyTable.notifications.duplicateTech"));
       setSnackbarOpen(true);
     }
   };
@@ -91,7 +99,7 @@ export default function TechnologyTable({
         if (confirmResult) handleDeleteRow(row.id);
         setDeleteRowOpen(defaultConfirmCallback);
       },
-      message: "Remove this row?",
+      message: t("technologyTable.confirmationMessage.deleteRow"),
     });
   };
 
@@ -101,10 +109,10 @@ export default function TechnologyTable({
   };
 
   const columns: GridColDef[] = [
-    { field: "technology", headerName: "Technology", flex: 1 },
+    { field: "technology", headerName: t("technologyTable.technologyGrid.columns.technology"), flex: 1 },
     {
       field: "ability",
-      headerName: "Ability",
+      headerName: t("technologyTable.technologyGrid.columns.ability"),
       flex: 0.5,
       renderCell: (params) => (
         <span>
@@ -115,28 +123,28 @@ export default function TechnologyTable({
     },
     {
       field: "category",
-      headerName: "Category",
+      headerName: t("technologyTable.technologyGrid.columns.category"),
       flex: 1,
       renderCell: (params) => (
         <span>
-          {Array.isArray(params.value) ? params.value.join(", ") : ""}
+          {Array.isArray(params.value) ? params.value.map(c=> categories.find(n=>n.value === c)?.label).join(", ") : ""}
         </span>
       ),
     },
     {
       field: "actions",
-      headerName: "Actions",
+      headerName: t("technologyTable.technologyGrid.columns.actions"),
       flex: 0.5,
       renderCell: (params) => (
         <Box>
-          <Tooltip title="Edit">
+          <Tooltip title={t("technologyTable.technologyGrid.actions.edit")}>
             <IconButton
               onClick={() => handleRowEditClick(params.row as TechnologyRow)}
             >
               <EditIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Delete">
+          <Tooltip title={t("technologyTable.technologyGrid.actions.delete")}>
             <IconButton
               onClick={() => handleRowDeleteClick(params.row as TechnologyRow)}
             >
@@ -158,7 +166,7 @@ export default function TechnologyTable({
             handleDataChanged([...data, { ...newRow }]);
             handleRowClick(newRow);
           }}
-          text="Add Row"
+          text={t("technologyTable.addRowBtnLabel")}
         />
       </Stack>
 
