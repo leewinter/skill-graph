@@ -116,7 +116,7 @@ export default function Graph() {
                             onClick={() => handleCheckboxChecked(cat)}
                           />
                         }
-                        label={availableCategories.find(c=> c.value === cat.category)?.label}
+                        label={availableCategories.find(c => c.value === cat.category)?.label}
                       />
                     );
                   })}
@@ -126,45 +126,25 @@ export default function Graph() {
         )}
         <Grid size={{ xs: 12 }} container spacing={2}>
           <Grid size={{ xs: 12, md: 8 }}>
-            <Card>
-              <CardContent>
-                <BarTechnology data={datasetsFilteredByCategory} />
-              </CardContent>
-            </Card>
+            <BarTechnology data={datasetsFilteredByCategory} />
           </Grid>
 
           <Grid size={{ xs: 12, md: 4 }}>
-            <Card>
-              <CardContent>
-                <RadarTechnology data={datasetsFilteredByCategory} />
-              </CardContent>
-            </Card>
+            <RadarTechnology data={datasetsFilteredByCategory} />
           </Grid>
         </Grid>
         <Grid size={{ xs: 12 }} container spacing={2}>
           <Grid size={{ xs: 12, md: 4 }}>
-            <Card>
-              <CardContent>
-                <PieTechnology data={datasetsFilteredByCategory} />
-              </CardContent>
-            </Card>
+            <PieTechnology data={datasetsFilteredByCategory} />
           </Grid>
 
           <Grid size={{ xs: 12, md: 8 }}>
-            <Card>
-              <CardContent>
-                <PolarCategories data={datasetsFilteredByCategory} />
-              </CardContent>
-            </Card>
+            <PolarCategories data={datasetsFilteredByCategory} />
           </Grid>
         </Grid>
         <Grid size={{ xs: 12 }} container spacing={2}>
           <Grid size={{ xs: 12 }}>
-            <Card>
-              <CardContent>
-                <SankeyTechnology data={datasetsFilteredByCategory} />
-              </CardContent>
-            </Card>
+            <SankeyTechnology data={datasetsFilteredByCategory} />
           </Grid>
         </Grid>
       </Grid>
