@@ -1,28 +1,29 @@
-import FilterListIcon from "@mui/icons-material/FilterList";
+import { Chart, registerables } from "chart.js";
+import { useEffect, useMemo, useState } from "react";
+
+import BarTechnology from "./graph-types/BarTechnology";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Checkbox from "@mui/material/Checkbox";
 import Divider from "@mui/material/Divider";
+import FilterListIcon from "@mui/icons-material/FilterList";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import Grid from "@mui/material/Grid2";
 import IconButton from "@mui/material/IconButton";
-import { ProfileRow } from "@src/components/Profiles/profile-table-types";
-import { TechnologyRow } from "@src/components/TechnologyTable/table-types";
 import { PROFILES_DATA_KEY } from "@src/constants";
-import { Chart, registerables } from "chart.js";
-import localforage from "localforage";
-import { useEffect, useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
-
-import BarTechnology from "./graph-types/BarTechnology";
 import PieTechnology from "./graph-types/PieTechnology";
 import PolarCategories from "./graph-types/PolarCategories";
+import { ProfileRow } from "@src/components/Profiles/profile-table-types";
 import RadarTechnology from "./graph-types/RadarTechnology";
 import SankeyTechnology from "./graph-types/SankeyCategoryTechnology";
+import { TechnologyRow } from "@src/components/TechnologyTable/table-types";
 import { extractUniqueCatgories } from "./graphHelpers";
+import localforage from "localforage";
+import { useAvailableCategories } from "@src/hooks/useAvailableCategories";
+import { useLocation } from "react-router-dom";
 
 Chart.register(...registerables);
 
@@ -38,6 +39,8 @@ export default function Graph() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const profileId = queryParams.get("profile-id");
+
+  const availableCategories = useAvailableCategories();
 
   useEffect(() => {
     const getProfile = async () => {
@@ -113,7 +116,7 @@ export default function Graph() {
                             onClick={() => handleCheckboxChecked(cat)}
                           />
                         }
-                        label={cat.category}
+                        label={availableCategories.find(c=> c.value === cat.category)?.label}
                       />
                     );
                   })}

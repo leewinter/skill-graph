@@ -3,16 +3,20 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
-import { useNavigate } from "react-router-dom";
-
 import backgroundImage from "../../../public/skill_chart.png";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function Home() {
   const navigate = useNavigate();
 
+  const { t, ready } = useTranslation();
+
   const handleGetStarted = () => {
     navigate("/profiles");
   };
+
+  if (!ready) return <div>{t("shared.loading")}</div>;
 
   return (
     <Container
@@ -46,27 +50,25 @@ export default function Home() {
         sx={{
           position: "relative",
           zIndex: 1,
-          backgroundColor: "rgba(255, 255, 255, 0.8)", // Semi-transparent white background
-          padding: 3, // Space inside the box
-          borderRadius: 2, // Rounded corners
-          boxShadow: 3, // Slight shadow for better visibility
-          maxWidth: "600px", // Optional: Limit the width of the box
-          margin: "auto", // Center the box horizontally
-          textAlign: "center", // Center text inside
-          mt: 5, // Top margin
+          backgroundColor: "rgba(255, 255, 255, 0.8)",
+          padding: 3, 
+          borderRadius: 2, 
+          boxShadow: 3, 
+          maxWidth: "600px", 
+          margin: "auto",
+          textAlign: "center", 
+          mt: 5,
         }}
       >
         <Typography variant="h4" component="h1" gutterBottom>
-          Skill Graph
+          {t("home.title")}
         </Typography>
         <Divider sx={{ my: 2 }} />
         <Typography variant="body1" gutterBottom>
-          Welcome to Skill Graph! This simple tool allows you to create and
-          manage a list of skills, each with an associated ability score.
+          {t("home.p1")}          
         </Typography>
         <Typography variant="body1" gutterBottom>
-          All your data is securely stored locally on your device, ensuring
-          privacy and easy access.
+          {t("home.p2")}           
         </Typography>
         <Typography
           variant="caption"
@@ -74,8 +76,7 @@ export default function Home() {
           display="block"
           gutterBottom
         >
-          The data is saved using IndexedDB, Web SQL, or local storage depending
-          on your browser compatibility.
+          {t("home.caption1")}          
         </Typography>
         <Box mt={4}>
           <Button
@@ -84,7 +85,7 @@ export default function Home() {
             size="large"
             onClick={handleGetStarted}
           >
-            Get Started
+            {t("home.getStartedBtn")}            
           </Button>
         </Box>
       </Box>

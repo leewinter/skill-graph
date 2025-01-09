@@ -1,13 +1,16 @@
-import Box from "@mui/material/Box";
-import { TechnologyRow } from "@src/components/TechnologyTable/table-types";
-import { useWindowResize } from "@src/hooks/useWindowResize";
+import * as d3 from "d3-scale-chromatic";
+
 import { Chart as ChartJs, registerables } from "chart.js";
 import { Flow, SankeyController } from "chartjs-chart-sankey";
-import * as d3 from "d3-scale-chromatic";
-import { Chart } from "react-chartjs-2";
 
+import Box from "@mui/material/Box";
+import { Chart } from "react-chartjs-2";
+import { TechnologyRow } from "@src/components/TechnologyTable/table-types";
 import { extractUniqueCatgories } from "../graphHelpers";
 import { hexToRgba } from "../graphHelpers";
+import { useAvailableCategories } from "@src/hooks/useAvailableCategories";
+import { useTranslation } from "react-i18next";
+import { useWindowResize } from "@src/hooks/useWindowResize";
 
 interface SankeyDataPoint {
   from: string;
@@ -23,10 +26,14 @@ export default function SankeyTechnology(props: { data: TechnologyRow[] }) {
 
   const { dimensions } = useWindowResize();
 
+  const categories = useAvailableCategories();
+
+  const { t, ready } = useTranslation();
+
   // Transform the data into a Sankey-compatible format
   const links: SankeyDataPoint[] = data.flatMap((row) =>
     row.category.map((category) => ({
-      from: category, // Each category becomes a source
+      from: categories.find(c=>c.value === category)?.label || "", // Each category becomes a source
       to: row.technology, // Technology becomes the target
       flow: row.ability / row.category.length, // Distribute the ability value among categories
     }))
@@ -43,10 +50,12 @@ export default function SankeyTechnology(props: { data: TechnologyRow[] }) {
   const uniqueCategories = extractUniqueCatgories(data);
   const categoryColors = Object.fromEntries(
     uniqueCategories.map((cat, i) => [
-      cat,
+       categories.find(c=>c.value === cat)?.label || "",
       hexToRgba(d3.schemeAccent[i % d3.schemeAccent.length], 0.9),
     ])
   );
+
+  if (!ready) return <div>{t("shared.loading")}</div>;
 
   return (
     <Box
@@ -85,7 +94,7 @@ export default function SankeyTechnology(props: { data: TechnologyRow[] }) {
             },
             title: {
               display: true,
-              text: "Sankey Chart: Categories to Technologies",
+              text: t("charts.sankeyTechnology.title"),
               font: {
                 size: 18,
                 weight: "bold",
@@ -103,7 +112,7 @@ export default function SankeyTechnology(props: { data: TechnologyRow[] }) {
         data={{
           datasets: [
             {
-              label: "Category to Technology Flow",
+              label: t("charts.sankeyTechnology.datasets.categoryToTechLabel"),
               data: links,
               colorFrom: (ctx) =>
                 ctx.raw && (ctx.raw as SankeyDataPoint).from

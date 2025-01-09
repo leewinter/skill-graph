@@ -1,11 +1,13 @@
-import Box from "@mui/material/Box";
-import { TechnologyRow } from "@src/components/TechnologyTable/table-types";
-import { useWindowResize } from "@src/hooks/useWindowResize";
-import { CoreChartOptions, ScriptableContext } from "chart.js";
 import * as d3 from "d3-scale-chromatic";
-import { Radar } from "react-chartjs-2";
 
+import { CoreChartOptions, ScriptableContext } from "chart.js";
+
+import Box from "@mui/material/Box";
+import { Radar } from "react-chartjs-2";
+import { TechnologyRow } from "@src/components/TechnologyTable/table-types";
 import { hexToRgba } from "../graphHelpers";
+import { useTranslation } from "react-i18next";
+import { useWindowResize } from "@src/hooks/useWindowResize";
 
 interface ChartOptionsShim extends CoreChartOptions<"radar"> {
   script: { min: number; max: number };
@@ -18,6 +20,10 @@ export default function RadarTechnology(props: { data: TechnologyRow[] }) {
 
   const technologyColours = d3.schemeCategory10;
   const categoryColours = d3.schemeAccent;
+
+  const { t, ready } = useTranslation();
+
+  if (!ready) return <div>{t("shared.loading")}</div>;
 
   return (
     <Box
@@ -51,7 +57,7 @@ export default function RadarTechnology(props: { data: TechnologyRow[] }) {
             plugins: {
               title: {
                 display: true,
-                text: "Technology Competency and Category Radar",
+                text: t("charts.radarTechnology.title"),
                 font: {
                   size: 18,
                   weight: "bold",
@@ -77,7 +83,7 @@ export default function RadarTechnology(props: { data: TechnologyRow[] }) {
           datasets: [
             {
               data: data.map((n) => n.ability),
-              label: "Ability",
+              label: t("charts.radarTechnology.datasets.abilityLabel"),
               backgroundColor: hexToRgba(technologyColours[0], 0.6),
               borderColor: hexToRgba(technologyColours[1], 0.8),
               pointBackgroundColor: data.map((_, i) =>
@@ -87,7 +93,7 @@ export default function RadarTechnology(props: { data: TechnologyRow[] }) {
             },
             {
               data: data.map((n) => n.category.length),
-              label: "Category Count",
+              label: t("charts.radarTechnology.datasets.categoryCountLabel"),
               backgroundColor: hexToRgba(categoryColours[2], 0.6),
               borderColor: hexToRgba(categoryColours[3], 0.8),
               pointBackgroundColor: data.map((_, i) =>

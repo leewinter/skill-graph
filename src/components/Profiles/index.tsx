@@ -1,28 +1,29 @@
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import InsightsIcon from "@mui/icons-material/Insights";
-import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import Stack from "@mui/material/Stack";
-import Tooltip from "@mui/material/Tooltip";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import Button from "@src/components/Button";
 import {
-  ConfirmationCallback,
   ConfirmDialog,
+  ConfirmationCallback,
   defaultConfirmCallback,
 } from "@src/components/ConfirmDialog";
-import { InfoDialog } from "@src/components/InfoDialog/Index";
-import { PROFILES_DATA_KEY } from "@src/constants";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { ProfileRow, getDefaultRow } from "./profile-table-types";
 import { base64AsData, dataAsBase64 } from "@src/utils/base64";
-import { copyToClipboard } from "@src/utils/clipboard";
-import localforage from "localforage";
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
+import Box from "@mui/material/Box";
+import Button from "@src/components/Button";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { DataExportDialog } from "@src/components/DataExportDialog/Index";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import EditRowDialog from "./EditRowDialog";
-import { getDefaultRow, ProfileRow } from "./profile-table-types";
+import IconButton from "@mui/material/IconButton";
+import InsightsIcon from "@mui/icons-material/Insights";
+import { PROFILES_DATA_KEY } from "@src/constants";
+import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
+import { copyToClipboard } from "@src/utils/clipboard";
+import localforage from "localforage";
+import { useTranslation } from "react-i18next";
 
 const initData: ProfileRow[] = [];
 
@@ -37,6 +38,8 @@ export default function ProfilesTable() {
   const [dataUrlOpen, setDataUrlOpen] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [currentRow, setCurrentRow] = useState<ProfileRow | null>(null);
+
+  const { t, ready } = useTranslation();
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -60,7 +63,7 @@ export default function ProfilesTable() {
               (n) => n.id === jsonData.id
             );
             if (alreadyExistingProfile) {
-              confirmationMessage = `Profile already exists for ${jsonData.name}, would you like to update?`;
+              confirmationMessage = t("profiles.confirmationMessage.profileAlreadyExists", { name: jsonData.name });
               confirmationCallback = () => {
                 if (dataFromStore) {
                   const updatedRows = dataFromStore.map((row) => {
@@ -73,7 +76,7 @@ export default function ProfilesTable() {
                 }
               };
             } else {
-              confirmationMessage = `Profile does not currently exist for ${jsonData.name}, would you like to import?`;
+              confirmationMessage = t("profiles.confirmationMessage.profileIsNew", { name: jsonData.name });
               confirmationCallback = () => {
                 handleDataChanged([...(dataFromStore || []), jsonData]);
               };
@@ -141,7 +144,7 @@ export default function ProfilesTable() {
         if (confirmResult) handleDeleteRow(row.id);
         setDeleteRowOpen(defaultConfirmCallback);
       },
-      message: "Remove this row?",
+      message: t("profiles.confirmationMessage.deleteRow"),
     });
   };
 
@@ -163,36 +166,38 @@ export default function ProfilesTable() {
     if (currentRow?.newRow) handleDeleteRow(currentRow.id);
   };
 
+  if (!ready) return <div>{t("shared.loading")}</div>;
+
   const columns: GridColDef[] = [
-    { field: "name", headerName: "Name", flex: 1 },
+    { field: "name", headerName: t("profiles.profileGrid.columns.name"), flex: 1 },
     {
       field: "actions",
-      headerName: "Actions",
+      headerName: t("profiles.profileGrid.columns.actions"),
       width: 200,
       renderCell: (params) => (
         <Box>
-          <Tooltip title="Edit">
+          <Tooltip title={t("profiles.profileGrid.actions.edit")}>
             <IconButton
               onClick={() => handleRowEditClick(params.row as ProfileRow)}
             >
               <EditIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Graph">
+          <Tooltip title={t("profiles.profileGrid.actions.charts")}>
             <IconButton
               onClick={() => handleRowGraphClick(params.row as ProfileRow)}
             >
               <InsightsIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Copy URL">
+          <Tooltip title={t("profiles.profileGrid.actions.copy")}>
             <IconButton
               onClick={() => handleDataUrlToClipboard(params.row as ProfileRow)}
             >
               <ContentCopyIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Delete">
+          <Tooltip title={t("profiles.profileGrid.actions.delete")}>
             <IconButton
               onClick={() => handleRowDeleteClick(params.row as ProfileRow)}
             >
@@ -203,6 +208,7 @@ export default function ProfilesTable() {
       ),
     },
   ];
+ 
 
   return (
     <Box>
@@ -221,7 +227,7 @@ export default function ProfilesTable() {
             handleDataChanged([...data, { ...newRow }]);
             handleRowEditClick(newRow);
           }}
-          text="Add Row"
+          text={t("profiles.addRowBtnLabel")}
         />
       </Stack>
       <ConfirmDialog
@@ -238,12 +244,12 @@ export default function ProfilesTable() {
         open={deleteRowOpen.open}
         message={deleteRowOpen.message}
       />
-      <InfoDialog
+      <DataExportDialog
         id="data-url-confirmation"
         keepMounted
         onClose={() => setDataUrlOpen(null)}
         open={Boolean(dataUrlOpen)}
-        message="Share your profile"
+        message={t("profiles.shareProfileTitle")}
         url={dataUrlOpen}
       />
       <EditRowDialog

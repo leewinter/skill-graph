@@ -1,15 +1,23 @@
-import Box from "@mui/material/Box";
-import { TechnologyRow } from "@src/components/TechnologyTable/table-types";
-import { useWindowResize } from "@src/hooks/useWindowResize";
 import * as d3 from "d3-scale-chromatic";
-import { PolarArea } from "react-chartjs-2";
 
+import Box from "@mui/material/Box";
+import { PolarArea } from "react-chartjs-2";
+import { TechnologyRow } from "@src/components/TechnologyTable/table-types";
 import { hexToRgba } from "../graphHelpers";
+import { useAvailableCategories } from "@src/hooks/useAvailableCategories";
+import { useTranslation } from "react-i18next";
+import { useWindowResize } from "@src/hooks/useWindowResize";
 
 export default function PolarCategories(props: { data: TechnologyRow[] }) {
   const { data } = props;
 
   const { dimensions } = useWindowResize();
+
+  const categories = useAvailableCategories();
+
+  const { t, ready } = useTranslation();
+
+  if (!ready) return <div>{t("shared.loading")}</div>;
 
   // Calculate the frequency of each category
   const categoryFrequency = data
@@ -19,7 +27,7 @@ export default function PolarCategories(props: { data: TechnologyRow[] }) {
       return acc;
     }, {});
 
-  const labels = Object.keys(categoryFrequency);
+  const labels = Object.keys(categoryFrequency).map(c=> categories.find(n=>n.value === c)?.label);
   const frequencies = Object.values(categoryFrequency);
 
   return (
@@ -44,7 +52,7 @@ export default function PolarCategories(props: { data: TechnologyRow[] }) {
           plugins: {
             title: {
               display: true,
-              text: "Category Frequency Distribution",
+              text: t("charts.polarCategories.title"),
               font: {
                 size: 18,
                 weight: "bold",
@@ -73,7 +81,7 @@ export default function PolarCategories(props: { data: TechnologyRow[] }) {
           datasets: [
             {
               data: frequencies,
-              label: "Category Frequency",
+              label: t("charts.polarCategories.datasets.categoryFrequencyLabel"),
               backgroundColor: labels.map(
                 (_, i) =>
                   hexToRgba(d3.schemeAccent[i % d3.schemeAccent.length], 0.6) // Add transparency

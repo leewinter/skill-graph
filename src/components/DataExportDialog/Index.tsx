@@ -4,11 +4,12 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import { QRCodeSVG } from "qrcode.react";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { QRCodeSVG } from "qrcode.react";
+import { useTranslation } from "react-i18next";
 
-export interface InfoDialogProps {
+export interface DataExportDialogProps {
   id: string;
   keepMounted: boolean;
   message: string | null;
@@ -17,8 +18,12 @@ export interface InfoDialogProps {
   onClose: () => void;
 }
 
-export function InfoDialog(props: InfoDialogProps) {
+export function DataExportDialog(props: DataExportDialogProps) {
   const { onClose, message, url, open, ...other } = props;
+
+  const { t, ready } = useTranslation();
+
+  if (!ready) return <div>{t("shared.loading")}</div>;
 
   return (
     <Dialog
@@ -36,8 +41,7 @@ export function InfoDialog(props: InfoDialogProps) {
         }}
       >
         <Typography variant="body2">
-          Your data URL has automatically been copied to the clipboard. You can
-          share your profile by sending the below URL to someone.
+          {t("dataExportDialog.p1")}          
         </Typography>
         {url && (
           <div
@@ -50,19 +54,16 @@ export function InfoDialog(props: InfoDialogProps) {
             }}
           >
             <Typography variant="body2">
-              Scan the QR code below to access the link:
+              {t("dataExportDialog.qrP1")}              
             </Typography>
             <QRCodeSVG value={url} size={200} />
           </div>
         )}
         <Alert severity="info">
-          Please note that any changes made by the person opening the link will
-          only apply to their own view, and will not affect your profile.
-          Likewise, any changes you make will not be reflected in the shared
-          link.
+          {t("dataExportDialog.info1")}          
         </Alert>
         <TextField
-          label="Shareable URL"
+          label={t("dataExportDialog.urlLabel")}
           value={url || ""}
           fullWidth
           variant="outlined"
@@ -70,7 +71,7 @@ export function InfoDialog(props: InfoDialogProps) {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} autoFocus>
-          OK
+          {t("shared.ok")}
         </Button>
       </DialogActions>
     </Dialog>

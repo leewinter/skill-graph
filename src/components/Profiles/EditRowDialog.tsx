@@ -1,13 +1,13 @@
+import Button from "@src/components/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import TextField from "@mui/material/TextField";
-import Button from "@src/components/Button";
-import TechnologyTable from "@src/components/TechnologyTable";
-
-import { TechnologyRow } from "../TechnologyTable/table-types";
 import { ProfileRow } from "./profile-table-types";
+import { TechnologyRow } from "../TechnologyTable/table-types";
+import TechnologyTable from "@src/components/TechnologyTable";
+import TextField from "@mui/material/TextField";
+import { useTranslation } from "react-i18next";
 
 export default function EditRowDialog({
   open,
@@ -22,11 +22,15 @@ export default function EditRowDialog({
   setCurrentRow: React.Dispatch<React.SetStateAction<ProfileRow | null>>;
   saveRow: () => void;
 }) {
+  const { t, ready } = useTranslation();
+
   const handleTechnologiesChange = (technologies: TechnologyRow[]) => {
     setCurrentRow((prev) =>
       prev ? { ...prev, technologies: technologies } : null
     );
   };
+
+  if (!ready) return <div>{t("shared.loading")}</div>;
 
   if (!currentRow) return null;
   return (
@@ -42,10 +46,10 @@ export default function EditRowDialog({
         },
       }}
     >
-      <DialogTitle>Edit Row</DialogTitle>
+      <DialogTitle>{t("profiles.editRowDialog.title")}</DialogTitle>
       <DialogContent dividers>
         <TextField
-          label="Name"
+          label={t("profiles.editRowDialog.nameInputLabel")}
           value={currentRow?.name || ""}
           onChange={(e) => {
             setCurrentRow((prev) =>
@@ -62,8 +66,8 @@ export default function EditRowDialog({
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} text="Cancel" />
-        <Button onClick={saveRow} text="Save" />
+        <Button onClick={onClose} text={t("shared.cancel")} />
+        <Button onClick={saveRow} text={t("shared.save")} />
       </DialogActions>
     </Dialog>
   );
