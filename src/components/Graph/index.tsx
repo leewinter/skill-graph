@@ -3,8 +3,6 @@ import { useEffect, useMemo, useState } from "react";
 
 import BarTechnology from "./graph-types/BarTechnology";
 import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
 import Checkbox from "@mui/material/Checkbox";
 import Divider from "@mui/material/Divider";
 import FilterListIcon from "@mui/icons-material/FilterList";
