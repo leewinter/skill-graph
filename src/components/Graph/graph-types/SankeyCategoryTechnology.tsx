@@ -61,8 +61,8 @@ export default function SankeyTechnology(props: { data: TechnologyRow[] }) {
     <FullscreenDialog>
       {({ fullscreen }) => {
         const chartHeight = fullscreen
-          ? dimensions.height * 0.8 // Use a large proportion of the screen height in fullscreen
-          : Math.min(dimensions.height * 0.6, 300); // Default size for non-fullscreen mode
+          ? dimensions.height * 0.8
+          : Math.min(dimensions.height * 0.6, 500);
 
         return (
           <Chart
@@ -122,6 +122,7 @@ export default function SankeyTechnology(props: { data: TechnologyRow[] }) {
             }}
             style={{
               height: chartHeight,
+              maxHeight: chartHeight
             }}
           />
         );
