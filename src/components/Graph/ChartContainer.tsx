@@ -20,7 +20,7 @@ function FullscreenDialog({ children }: { children: (props: { fullscreen: boolea
       <Dialog
         open={fullscreen}
         onClose={() => setFullscreen(false)}
-        fullScreen
+        maxWidth="xl"
       >
         <CardHeader
           action={<IconButton onClick={() => setFullscreen(false)}>
