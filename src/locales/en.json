@@ -13,12 +13,12 @@
       "update": "Update",
       "ok": "Ok",
       "categories": {
-      "Infrastructure": "Infrastructure",
-      "UI": "UI",
-      "Cloud": "Cloud",
-      "Backend": "Backend",
-      "Data": "Data"
-    }
+        "Infrastructure": "Infrastructure",
+        "UI": "UI",
+        "Cloud": "Cloud",
+        "Backend": "Backend",
+        "Data": "Data"
+      }
     },
     "home": {
       "title": "Skill Graph",
@@ -33,11 +33,11 @@
       "info1": "Please note that any changes made by the person opening the link will only apply to their own view, and will not affect your profile. Likewise, any changes you make will not be reflected in the shared link.",
       "urlLabel": "Shareable URL"
     },
-    "layout":{
+    "layout": {
       "home": "Home",
       "profiles": "Profiles"
     },
-    "notFound":{
+    "notFound": {
       "title": "Nothing to see here!",
       "link": "Go to the home page"
     },
@@ -63,7 +63,7 @@
           "delete": "Delete"
         }
       },
-      "addRowBtnLabel": "Add Row",
+      "addRowBtnLabel": "Add Profile",
       "shareProfileTitle": "Share your profile"
     },
     "technologyTable": {
@@ -93,7 +93,7 @@
       },
       "addRowBtnLabel": "Add Row"
     },
-    "charts":{
+    "charts": {
       "barTechnology": {
         "title": "Technology Ability Chart",
         "datasets": {
@@ -126,6 +126,5 @@
         }
       }
     }
-    
   }
 }
