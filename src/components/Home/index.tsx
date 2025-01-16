@@ -23,8 +23,7 @@ export default function Home() {
       maxWidth="lg"
       style={{
         position: "relative",
-        minHeight: "100vh", // Full viewport height
-        overflow: "hidden",
+        minHeight: "100vh",
       }}
     >
       {/* Background image */}
@@ -51,12 +50,12 @@ export default function Home() {
           position: "relative",
           zIndex: 1,
           backgroundColor: "rgba(255, 255, 255, 0.8)",
-          padding: 3, 
-          borderRadius: 2, 
-          boxShadow: 3, 
-          maxWidth: "600px", 
+          padding: 3,
+          borderRadius: 2,
+          boxShadow: 3,
+          maxWidth: "600px",
           margin: "auto",
-          textAlign: "center", 
+          textAlign: "center",
           mt: 5,
         }}
       >
@@ -65,10 +64,10 @@ export default function Home() {
         </Typography>
         <Divider sx={{ my: 2 }} />
         <Typography variant="body1" gutterBottom>
-          {t("home.p1")}          
+          {t("home.p1")}
         </Typography>
         <Typography variant="body1" gutterBottom>
-          {t("home.p2")}           
+          {t("home.p2")}
         </Typography>
         <Typography
           variant="caption"
@@ -76,7 +75,7 @@ export default function Home() {
           display="block"
           gutterBottom
         >
-          {t("home.caption1")}          
+          {t("home.caption1")}
         </Typography>
         <Box mt={4}>
           <Button
@@ -85,7 +84,7 @@ export default function Home() {
             size="large"
             onClick={handleGetStarted}
           >
-            {t("home.getStartedBtn")}            
+            {t("home.getStartedBtn")}
           </Button>
         </Box>
       </Box>
