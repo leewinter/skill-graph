@@ -5,7 +5,7 @@ import { TechnologyRow } from "@src/components/TechnologyTable/table-types";
 import { hexToRgba } from "../graphHelpers";
 import { useTranslation } from "react-i18next";
 import { useWindowResize } from "@src/hooks/useWindowResize";
-import FullscreenDialog from "@src/components/Graph/ChartContainer"
+import FullscreenDialog from "@src/components/Graph/ChartContainer";
 
 export default function BarTechnology(props: { data: TechnologyRow[] }) {
   const { data } = props;

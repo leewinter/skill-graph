@@ -22,8 +22,9 @@ import { extractUniqueCatgories } from "./graphHelpers";
 import localforage from "localforage";
 import { useAvailableCategories } from "@src/hooks/useAvailableCategories";
 import { useLocation } from "react-router-dom";
+import { Flow, SankeyController } from "chartjs-chart-sankey";
 
-Chart.register(...registerables);
+Chart.register(...registerables, SankeyController, Flow);
 
 type CategoryCheckbox = {
   checked: boolean;
@@ -114,7 +115,11 @@ export default function Graph() {
                             onClick={() => handleCheckboxChecked(cat)}
                           />
                         }
-                        label={availableCategories.find(c => c.value === cat.category)?.label}
+                        label={
+                          availableCategories.find(
+                            (c) => c.value === cat.category
+                          )?.label
+                        }
                       />
                     );
                   })}
