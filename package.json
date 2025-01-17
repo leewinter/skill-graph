@@ -46,5 +46,8 @@
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "typescript": "^5.2.2",
     "vite": "^5.2.0"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.15.0"
   }
 }
