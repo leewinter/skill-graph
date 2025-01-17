@@ -1,4 +1,4 @@
-import { Global, ThemeProvider, css } from "@emotion/react";
+import { ThemeProvider } from "@emotion/react";
 
 import App from "@src/App.tsx";
 import { CssBaseline } from "@mui/material";
