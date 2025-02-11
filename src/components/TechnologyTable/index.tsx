@@ -19,6 +19,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { useAvailableCategories } from "@src/hooks/useAvailableCategories";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useDataGridTranslations } from "@src/hooks/useDataGridTranslations"
 
 export default function TechnologyTable({
   initData,
@@ -41,6 +42,8 @@ export default function TechnologyTable({
   const categories = useAvailableCategories();
 
   const { t, ready } = useTranslation();
+
+  const localeText = useDataGridTranslations();
 
   if (!ready) return <div>{t("shared.loading")}</div>;
 
@@ -127,7 +130,7 @@ export default function TechnologyTable({
       flex: 1,
       renderCell: (params) => (
         <span>
-          {Array.isArray(params.value) ? params.value.map(c=> categories.find(n=>n.value === c)?.label).join(", ") : ""}
+          {Array.isArray(params.value) ? params.value.map(c => categories.find(n => n.value === c)?.label).join(", ") : ""}
         </span>
       ),
     },
@@ -158,7 +161,7 @@ export default function TechnologyTable({
 
   return (
     <Box>
-      <DataGrid rows={data} columns={columns} getRowId={(row) => row.id} />
+      <DataGrid localeText={localeText} rows={data} columns={columns} getRowId={(row) => row.id} />
       <Stack direction="row" spacing={2} sx={{ marginTop: 2 }}>
         <Button
           onClick={() => {
