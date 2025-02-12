@@ -125,6 +125,13 @@
           "categoryToTechLabel": "Flujo de Categoría a Tecnología"
         }
       }
-    }
+    },
+    "toolbarDensity": "Densidad",
+    "toolbarFilters": "Filtros",
+    "toolbarColumns": "Columnas",
+    "toolbarExport": "Exportar",
+    "footerRowSelected": "{{count}} fila(s) seleccionada(s)",
+    "footerTotalRows": "Filas totales",
+    "labelRowsPerPage": "Filas por página"
   }
 }

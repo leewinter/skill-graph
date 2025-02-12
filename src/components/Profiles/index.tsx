@@ -24,6 +24,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { copyToClipboard } from "@src/utils/clipboard";
 import localforage from "localforage";
 import { useTranslation } from "react-i18next";
+import { useDataGridTranslations } from "@src/hooks/useDataGridTranslations"
 
 const initData: ProfileRow[] = [];
 
@@ -41,6 +42,8 @@ export default function ProfilesTable() {
 
   const { t, ready } = useTranslation();
 
+  const localeText = useDataGridTranslations();
+
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
@@ -54,7 +57,7 @@ export default function ProfilesTable() {
       if (searchParams.has("data")) {
         const base64Data = searchParams.get("data");
         let confirmationMessage = "";
-        let confirmationCallback = () => {};
+        let confirmationCallback = () => { };
         if (base64Data) {
           const jsonData = base64AsData<ProfileRow>(base64Data);
           if (jsonData) {
@@ -208,11 +211,12 @@ export default function ProfilesTable() {
       ),
     },
   ];
- 
+
 
   return (
     <Box>
       <DataGrid
+        localeText={localeText}
         rows={data}
         columns={columns}
         pageSizeOptions={[5, 10, 25]}
